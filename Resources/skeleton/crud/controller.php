@@ -22,6 +22,9 @@ use {{ namespace }}\Form\{{ entity }}Type;
 use Yepsua\GeneratorBundle\UI\Grid;
 use Yepsua\CommonsBundle\Persistence\Dao;
 use Yepsua\CommonsBundle\IO\Paginator;
+{% if not associationMappings is empty  %}
+use Yepsua\CommonsBundle\IO\ObjectUtil;
+{% endif %}
 use Yepsua\SmarTwigBundle\UI\Message\Notification;
 
 use \YsJQuery as JQuery;
@@ -29,6 +32,10 @@ use \YsJQueryConstant as JQueryConstant;
 use \YsGridField as GridField;
 use \YsGridResponse as GridResponse;
 use \YsGridRow as GridRow;
+{% if not associationMappings is empty  %}
+use \YsGridConstants as GridConstants;
+{% endif %}
+
 
 /**
  * {{ entity }} controller.

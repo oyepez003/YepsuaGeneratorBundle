@@ -6,7 +6,7 @@
        method="POST"
        complete=js_function("jqXHR","
          if (jqXHR.status == 200){
-           $.pnotify(\'Book has been created\');
+           $.pnotify(\''~ entity ~' has been created\');
            dlgNew'~ entity ~'.wijdialog(\'destroy\');
            $(\'#'~ entity|lower ~'Grid\').trigger(\'reloadGrid\');
          }") 

@@ -48,11 +48,11 @@ The <info>doctrine:generate:richcrud</info> command generates a CRUD based on a 
 
 The default command only generates the list and show actions.
 
-<info>php app/console doctrine:generate:crud --entity=AcmeBlogBundle:Post --route-prefix=post_admin</info>
+<info>php app/console doctrine:generate:richcrud --entity=AcmeBlogBundle:Post --route-prefix=post_admin</info>
 
 Using the --with-write option allows to generate the new, edit and delete actions.
 
-<info>php app/console doctrine:generate:crud --entity=AcmeBlogBundle:Post --route-prefix=post_admin --with-write</info>
+<info>php app/console doctrine:generate:richcrud --entity=AcmeBlogBundle:Post --route-prefix=post_admin --with-write</info>
 EOT
             )
            ->setName('doctrine:generate:richcrud')

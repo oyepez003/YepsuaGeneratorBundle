@@ -35,7 +35,10 @@ class DoctrineCrudGenerator extends \Sensio\Bundle\GeneratorBundle\Generator\Doc
     
     protected function renderFile($skeletonDir, $template, $target, $parameters)
     {
-       $parameters = array_merge($parameters, array('fields' => $this->metadata->fieldMappings));
+       $parameters = array_merge($parameters, array(
+         'fields' => $this->metadata->fieldMappings, 
+         'associationMappings' => $this->metadata->associationMappings)
+       );
        parent::renderFile($skeletonDir, $template, $target, $parameters);
     }
 }
