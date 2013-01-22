@@ -1,0 +1,24 @@
+{{ '{% ui_dialog widgetVar="dlgNew'~ entity ~'" title="'~ entity ~' new" modal="true" %}
+
+  {% ajax_form id="frmNew'~ entity ~'"
+       update="#'~ entity|lower ~'Workspace"
+       action=path("'~ route_name_prefix ~'_create")
+       method="POST"
+       complete=js_function("jqXHR","
+         if (jqXHR.status == 200){
+           $.pnotify(\'Book has been created\');
+           dlgNew'~ entity ~'.wijdialog(\'destroy\');
+           $(\'#'~ entity|lower ~'Grid\').trigger(\'reloadGrid\');
+         }") 
+  %}
+
+    {{ form_widget(form) }}
+
+    <br/><br/>
+    <hr class="ui-widget-content">
+
+    {% ui_button style="float:right" type="submit" value="Create"%}
+
+  {% end_ajax_form %}
+
+{% end_ui_dialog %}' }}

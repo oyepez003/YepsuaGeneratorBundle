@@ -1,0 +1,6 @@
+{% if not config is defined %}
+  {% set config = "{message:'', baseZ:5000}" %}
+{% endif %}
+{% ajax_status onstart="$.blockUI(" ~ config ~ ");return false;"
+               oncomplete="$.unblockUI('');return false;"
+               for="*" %}
