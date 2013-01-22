@@ -1,0 +1,39 @@
+{
+    "name": "yepsua/generator-bundle",
+    "version": "1.0.0",
+    "description": "The RICH CRUD Generator for Symfony2",
+    "keywords": ["extensions","generator","admin","jquery","UI","RIA","jQuery4PHP"],
+    "homepage": "http://smartwig.yepsua.com",
+    "type": "symfony-bundle",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Omar Yepez",
+            "email": "omar.yepez@yepsua.com"
+        }
+    ],
+    "scripts": {
+        "post-install-cmd": [
+            "Sensio\\Bundle\\DistributionBundle\\Composer\\ScriptHandler::clearCache",
+            "Sensio\\Bundle\\DistributionBundle\\Composer\\ScriptHandler::installAssets"
+        ],
+        "post-update-cmd": [
+            "Sensio\\Bundle\\DistributionBundle\\Composer\\ScriptHandler::clearCache",
+            "Sensio\\Bundle\\DistributionBundle\\Composer\\ScriptHandler::installAssets"
+        ]
+    },
+    "require": {
+        "php": ">=5.3.2",
+        "symfony/framework-bundle": ">=2.1.*",
+        "yepsua/jQuery4PHP": "dev-master"
+        "yepsua/smartwig-bundle": "dev-master"
+    },
+    "autoload": {
+        "psr-0": { "Yepsua\\GeneratorBundle": "" }
+    },
+    "target-dir": "Yepsua/GeneratorBundle",
+    "extra": {
+        "symfony-app-dir": "app",
+        "symfony-web-dir": "web"
+    }
+}
