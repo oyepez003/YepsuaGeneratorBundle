@@ -29,7 +29,7 @@
       
       {% for field, metadata in fields %}
       
-        $field = new GridField('{{ entity|lower }}.{{field|replace({'_': ''})}}', '{{ field|capitalize }}');
+        $field = new GridField('{{ entity|lower }}.{{field}}', '{{ field|replace({'_': ' '})|title }}');
       {%- if metadata.id is defined %}
       
         $field->setHidden(true);
