@@ -6,14 +6,14 @@
   
 {% if 'new' in actions %}
   {{ '{% remote_command update="#'~ entity|lower ~'Workspace" type="GET" url=path("'~ route_name_prefix ~'_new") ' }}
-                    {{ 'name="rcNew'~ entity ~'" %}' }}
+                    {{ 'name="rcNew'~ entity|capitalize ~'" %}' }}
 
 {% endif %}
 {% if 'edit' in actions %}
   {{ '{% remote_command update="#'~ entity|lower ~'Workspace" type="GET" 
                     beforeSend=js_function("return SmarTwig.grid.hasSelectedRow(\'#'~ entity|lower ~'Grid\',\'Please select a row\')") 
                     url=arg(path("'~ route_name_prefix ~'_edit", { "id": "\'+ $(\'#'~ entity|lower ~'Grid\').jqGrid(\'getGridParam\',\'selrow\')+\'"}) | raw_url_decode)  
-                    name="rcEdit'~ entity ~'" %}' }}
+                    name="rcEdit'~ entity|capitalize ~'" %}' }}
 
 {% endif %}
 {% if 'delete' in actions %}
@@ -25,14 +25,14 @@
                         $(\'#'~ entity|lower ~'Grid\').trigger(\'reloadGrid\')
                       }")
                     url=arg(path("'~ route_name_prefix ~'_delete", { "id": "\'+ $(\'#'~ entity|lower ~'Grid\').jqGrid(\'getGridParam\',\'selarrrow\')+\'"}) | raw_url_decode)  
-                    name="rcDelete'~ entity ~'" %}' }}
+                    name="rcDelete'~ entity|capitalize ~'" %}' }}
 
 {% endif %}
 {% if 'show' in actions %}
   {{ '{% remote_command update="#'~ entity|lower ~'Workspace" type="GET" 
                     beforeSend=js_function("return SmarTwig.grid.hasSelectedRow(\'#'~ entity|lower ~'Grid\',\'Please select a row\')")
                     url=arg(path(\''~ route_name_prefix ~'_show\', { "id": "\'+ SmarTwig.grid.selectedRow(\'#'~ entity|lower ~'Grid\')+\'"}) | raw_url_decode)  
-                    name="rcShow'~ entity ~'" %}' }}
+                    name="rcShow'~ entity|capitalize ~'" %}' }}
 {% endif %}
   {%- for field, metadata in fields %}
       {% if metadata.type == 'date' %}
