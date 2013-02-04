@@ -41,7 +41,7 @@
       {% for association in associationMappings %}
         {% set fieldName = association.fieldName %}
         
-        $field = new GridField('{{fieldName}}.id', '{{fieldName|replace({'_': ' '})|capitalize|replace({' ': ''})}}');
+        $field = new GridField('{{fieldName}}.id', '{{fieldName|replace({'_': ' '})|title}}');
         $field->setSearchOptions(array(
           'value' => ':' . ObjectUtil::entityToKeyValue(
             $em->getRepository('{{association.targetEntity}}')->findAll(), ";%KEY%:%VALUE%" 
