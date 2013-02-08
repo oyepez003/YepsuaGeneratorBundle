@@ -37,10 +37,9 @@
       
         $grid->addGridField($field);
       {% endfor -%}
-      
       {% for association in associationMappings %}
         {% set fieldName = association.fieldName %}
-        
+
         $field = new GridField('{{fieldName}}.id', '{{fieldName|replace({'_': ' '})|title}}');
         $field->setSearchOptions(array(
           'value' => ':' . ObjectUtil::entityToKeyValue(
@@ -49,7 +48,7 @@
         ));        
         $field->setSType(GridConstants::EDIT_TYPE_SELECT);
         $grid->addGridField($field);
-      {%- endfor %}
+      {% endfor %}
       
       {# for key in associationMappings|keys %}
         {{ key }}:
@@ -63,7 +62,7 @@
           {% endif %}
         {% endfor %}
       {% endfor #}
-      
+
 {% if 'annotation' == format %}
         return array(
             'grid' => $grid
@@ -74,17 +73,6 @@
         ));
 {% endif %}
     }
-
-    public function entityToKeyValue($entities, $pattern =";%KEY%:%VALUE%"){
-      $toStringVal = "";
-      foreach($entities as $entitie){
-         $_pattern = $pattern;
-         $_pattern = str_replace('%KEY%', $entitie->getId(), $_pattern);
-         $_pattern = str_replace('%VALUE%', $entitie->__toString(), $_pattern);
-         $toStringVal .= $_pattern;
-      }
-      return $toStringVal;
-    }   
   
     /**
      * Public service - All {{ entity_class }} entities
