@@ -1,4 +1,5 @@
-{{ '{% ui_dialog widgetVar="dlgShow'~ entity ~'" title="'~ entity ~' show" modal="true" %}' }}
+{{ '{% ui_dialog widgetVar="dlgShow'~ entity ~'" title="'~ entity ~' show" modal="true"
+             close=js_function(\'$(this).dialog( "destroy" );$(this).remove();\') %}' }}
 
   <table class="record_properties">
     <tbody>

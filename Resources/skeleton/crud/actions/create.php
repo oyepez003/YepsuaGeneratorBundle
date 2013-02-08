@@ -32,18 +32,12 @@
                 {%- endif %}
 
             }
-
-{% if 'annotation' == format %}
-            return array(
-                'entity' => $entity,
-                'form'   => $form->createView(),
-            );
-{% else %}
+            
             return $this->render('{{ bundle }}:{{ entity|replace({'\\': '/'}) }}:new.html.twig', array(
                 'entity' => $entity,
                 'form'   => $form->createView(),
-            ));
-{% endif %}
+            ), new Response(null, 202));
+                        
         }catch(\Exception $e){
           $this->get('logger')->crit($e->getMessage());
           return new Response(Notification::error($e->getMessage()));

@@ -16,7 +16,7 @@ use \YsGridNavigator as GridNavigator;
 use \YsGridConstants as GridConstants;
 use \YsGridCustomButton as GridCustomButton;
 use \YsGridFilterToolbar as GridFilterToolbar;
-
+use \YsGridField as GridField;
 /**
  * Generates a Grid to show the data.
  * @author Omar Yepez <omar.yepez@yepsua.com>
@@ -27,6 +27,8 @@ class Grid extends \YsGrid{
   private $entityName;
   public static $ID_SUFFIX = "Grid";
   public static $RC_PREFIX = "rc";
+  public static $CRUD_TRANSLATION_DOMAIN = "richcrud";
+  public static $TRANSLATION_DOMAIN = "messages";
   private $hasAddButton = true;
   private $hasEditButton = true;
   private $hasDeleteButton = true;
@@ -34,12 +36,13 @@ class Grid extends \YsGrid{
   private $hasFilterButton = true;
   private $hasSearchButton = true;
   private $hasRefreshButton = true;
+  private $translationDomain;
   
   public function __construct($entityName, $caption = null, $gridHtmlProperties = null) {
     $this->setSortname(sprintf('%s.id',$entityName));
     $gridId = $entityName . self::$ID_SUFFIX;
     $this->setEntityName(ucfirst($entityName));
-    $this->translator = new \Symfony\Component\Translation\Translator('en');
+    $this->setTranslator(new \Symfony\Component\Translation\Translator('en'), self::$TRANSLATION_DOMAIN);
     parent::__construct($gridId, $caption, $gridHtmlProperties);
   }
   
@@ -156,7 +159,8 @@ class Grid extends \YsGrid{
    * The Symfony2 tranlator
    * @param \Symfony\Component\Translation\Translator $translator 
    */
-  public function setTranslator(\Symfony\Component\Translation\Translator $translator) {
+  public function setTranslator(\Symfony\Component\Translation\Translator $translator, $translationDomain = null) {
+    $this->setTranslationDomain($translationDomain);
     $this->translator = $translator;
   }
   
@@ -228,5 +232,18 @@ class Grid extends \YsGrid{
     $this->setHasDeleteButton(false);
     $this->setHasEditButton(false);
     $this->setHasAddButton(false);
+  }
+  
+  public function addGridField(GridField $gridFields) {
+    $gridFields->setColName($this->translator->trans($gridFields->getColName(),array(), $this->getTranslationDomain()));
+    parent::addGridField($gridFields);
+  }
+  
+  public function getTranslationDomain() {
+    return $this->translationDomain;
+  }
+
+  public function setTranslationDomain($translationDomain) {
+    $this->translationDomain = $translationDomain;
   }
 }

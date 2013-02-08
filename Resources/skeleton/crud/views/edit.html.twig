@@ -1,13 +1,16 @@
-{{ '{% ui_dialog title="'~ entity ~' edit" modal="true" widgetVar="dlgEdit'~ entity ~'" %}
-
+{{ '{% ui_dialog title="'~ entity ~' edit" modal="true" widgetVar="dlgEdit'~ entity ~'"
+              close=js_function(\'$(this).dialog( "destroy" );$(this).remove();\') %}
   {% ajax_form id="frmEdit'~ entity ~'"
        update="#'~ entity|lower ~'Workspace"
        action=path("'~ route_name_prefix ~'_update", { "id": entity.id })
        method="PUT"
+       beforeSubmit=js_function("_dlgEdit'~ entity ~' = dlgEdit'~ entity ~';")
        complete=js_function("jqXHR","
+         _dlgEdit'~ entity ~'.wijdialog(\'destroy\');
+         $(_dlgEdit'~ entity ~').remove();
          if (jqXHR.status == 200){
            $.pnotify(\'Update was Successful\');
-           dlgEdit'~ entity ~'.wijdialog(\'destroy\');
+           
            $(\'#'~ entity|lower ~'Grid\').trigger(\'reloadGrid\');
          }")
   %}

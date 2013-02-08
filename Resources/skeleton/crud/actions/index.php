@@ -29,7 +29,7 @@
       
       {% for field, metadata in fields %}
       
-        $field = new GridField('{{ entity|lower }}.{{field}}', '{{ field|replace({'_': ' '})|title }}');
+        $field = new GridField('{{ entity|lower }}.{{field}}', '{{ field|replace({'_': ' '})|capitalize }}');
       {%- if metadata.id is defined %}
       
         $field->setHidden(true);
@@ -37,11 +37,10 @@
       
         $grid->addGridField($field);
       {% endfor -%}
-      
       {% for association in associationMappings %}
         {% set fieldName = association.fieldName %}
-        
-        $field = new GridField('{{fieldName}}.id', '{{fieldName|replace({'_': ' '})|title}}');
+
+        $field = new GridField('{{fieldName}}.id', '{{fieldName|replace({'_': ' '})|capitalize }}');
         $field->setSearchOptions(array(
           'value' => ':' . ObjectUtil::entityToKeyValue(
             $em->getRepository('{{association.targetEntity}}')->findAll(), ";%KEY%:%VALUE%" 
@@ -49,7 +48,7 @@
         ));        
         $field->setSType(GridConstants::EDIT_TYPE_SELECT);
         $grid->addGridField($field);
-      {%- endfor %}
+      {% endfor %}
       
       {# for key in associationMappings|keys %}
         {{ key }}:
@@ -63,7 +62,7 @@
           {% endif %}
         {% endfor %}
       {% endfor #}
-      
+
 {% if 'annotation' == format %}
         return array(
             'grid' => $grid
@@ -74,17 +73,6 @@
         ));
 {% endif %}
     }
-
-    public function entityToKeyValue($entities, $pattern =";%KEY%:%VALUE%"){
-      $toStringVal = "";
-      foreach($entities as $entitie){
-         $_pattern = $pattern;
-         $_pattern = str_replace('%KEY%', $entitie->getId(), $_pattern);
-         $_pattern = str_replace('%VALUE%', $entitie->__toString(), $_pattern);
-         $toStringVal .= $_pattern;
-      }
-      return $toStringVal;
-    }   
   
     /**
      * Public service - All {{ entity_class }} entities
@@ -131,18 +119,18 @@
 
       {%- if metadata.type in ['date', 'datetime'] %}
 
-                $row->newCell($entitie->get{{field|replace({'_': ' '})|capitalize|replace({' ': ''})}}()->format('Y-m-d H:i:s'));
+                $row->newCell($entitie->get{{field|replace({'_': ' '})|title|replace({' ': ''})}}()->format('Y-m-d H:i:s'));
 
       {%- else %}
 
-                $row->newCell($entitie->get{{field|replace({'_': ' '})|capitalize|replace({' ': ''})}}());
+                $row->newCell($entitie->get{{field|replace({'_': ' '})|title|replace({' ': ''})}}());
 
       {%- endif %}
 
     {%- endfor %}
     {%- for association in associationMappings %}
     
-                $row->newCell((string) $entitie->get{{association.fieldName|replace({'_': ' '})|capitalize|replace({' ': ''})}}());
+                $row->newCell((string) $entitie->get{{association.fieldName|replace({'_': ' '})|title|replace({' ': ''})}}());
                 
     {%- endfor %}
     

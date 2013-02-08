@@ -31,23 +31,14 @@
                   'entity'      => $entity,
                   'delete_form' => $deleteForm->createView(),)
                 );
-
-                return $this->redirect($this->generateUrl('{{ route_name_prefix }}_edit', array('id' => $id)));
             }
 
-{% if 'annotation' == format %}
-            return array(
-                'entity'      => $entity,
-                'edit_form'   => $editForm->createView(),
-                'delete_form' => $deleteForm->createView(),
-            );
-{% else %}
             return $this->render('{{ bundle }}:{{ entity|replace({'\\': '/'}) }}:edit.html.twig', array(
                 'entity'      => $entity,
                 'edit_form'   => $editForm->createView(),
                 'delete_form' => $deleteForm->createView(),
-            ));
-{% endif %}
+            ), new Response(null, 202));
+            
         }catch(\Exception $e){
             $this->get('logger')->crit($e->getMessage());
             return new Response(Notification::error($e->getMessage()));
