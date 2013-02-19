@@ -13,6 +13,8 @@
            $(\'#'~ entity|lower ~'Grid\').trigger(\'reloadGrid\');
          }") 
   %}
+    
+    {% form_theme form \'YepsuaSmarTwigBundle:Form:table_layout.html.twig\' %}
 
     {{ form_widget(form) }}
 
