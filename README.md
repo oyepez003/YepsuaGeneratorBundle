@@ -26,3 +26,63 @@ To deactivate the interactive mode, use the --no-interaction option but don't fo
 ``` bash
 php app/console generate:doctrine:richcrud --entity=AcmeBlogBundle:Post --format=annotation --with-write --no-interaction
 ```
+
+## Installation
+
+Download and make sure you have the composer.phar latest version running the command:
+
+``` bash
+$ php composer.phar self-update
+```
+
+Add the next dependency in the composer.json file
+
+``` yml
+"require": {
+        ...
+        "yepsua/generator-bundle": "dev-master"
+        ...
+    },
+```
+
+### For install and up to date the bundle
+
+``` bash
+$ php composer.phar update yepsua/generator-bundle
+```
+
+# Configuration
+
+## 1) Add the required Bundles to your application kernel
+
+``` php
+<?php
+// app/AppKernel.php
+
+public function registerBundles()
+{
+    return array(
+        ...
+        new Yepsua\SmarTwigBundle\YepsuaSmarTwigBundle(),
+        new Yepsua\CommonsBundle\YepsuaCommonsBundle(),
+        new Yepsua\GeneratorBundle\YepsuaGeneratorBundle(),
+        ...
+    );
+}
+```
+
+## 4) Publishing assets
+
+Run the symfony command
+
+``` bash
+$ php app/console assets:install web
+```
+
+And now run the command and follow the steps:
+
+``` bash
+$ php app/console generate:doctrine:richcrud
+```
+
+Enjoy
