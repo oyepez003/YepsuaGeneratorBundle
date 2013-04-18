@@ -71,7 +71,7 @@ public function registerBundles()
 }
 ```
 
-## 4) Publishing assets
+## 2) Publishing assets
 
 Run the symfony command
 
@@ -79,7 +79,9 @@ Run the symfony command
 $ php app/console assets:install web
 ```
 
-And now run the command and follow the steps:
+## 3) Run
+
+The next command and follow the steps:
 
 ``` bash
 $ php app/console generate:doctrine:richcrud
