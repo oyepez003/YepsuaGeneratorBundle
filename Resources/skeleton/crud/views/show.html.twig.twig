@@ -1,0 +1,61 @@
+{{ '{% ui_dialog widgetVar="dlgShow'~ entity ~'" title="'~ entity ~' show" modal="true"
+             close=js_function(\'$(this).dialog( "destroy" );$(this).remove();\') %}' }}
+
+  <table class="record_properties">
+    <tbody>
+      {%- for field, metadata in fields %}
+
+      <tr>
+        <th>{{ field|capitalize }}</th>
+
+          {%- if metadata.type in ['date', 'datetime'] %}
+
+        <td>{{ '{{ entity.'~ field|replace({'_': ''}) ~'|date(\'Y-m-d H:i:s\') }}' }}</td>
+
+          {%- else %}
+
+        <td>{{ '{{ entity.'~ field|replace({'_': ''}) ~' }}' }}</td>
+
+          {%- endif %}
+
+      </tr>
+
+      {%- endfor %}
+
+    </tbody>
+  </table>
+{% if ('edit' in actions) or ('delete' in actions) %}
+
+  <br/><br/>
+  <hr class="ui-widget-content">
+  {% endif %}
+  {% if ('edit' in actions) %}
+{{'
+  {% ui_button style="float:right" onclick="rc'~ entity ~'EditAgain()" value="Edit"%}
+  {% remote_command update="#'~ entity|lower ~'Workspace" 
+       beforeSend=js_function("dlgShow'~ entity ~'.wijdialog(\'destroy\');") 
+       type="GET" 
+       url=path("'~ route_name_prefix ~'_edit", { "id": entity.id }) 
+       name="rc'~ entity ~'EditAgain" %}'}}
+  {% endif %}
+  {% if ('delete' in actions) %}
+{{'
+  {% ajax_form id="frmDelete'~ entity ~'"
+       update="#'~ entity|lower ~'Workspace"
+       action=path("'~ route_name_prefix ~'_delete", { "id": entity.id })
+       method="DELETE"
+       complete=js_function("jqXHR","
+         if (jqXHR.status == 200){
+           $.pnotify(\'Delete was Successful\');
+           dlgShow'~ entity ~'.wijdialog(\'destroy\');
+           $(\'#'~ entity|lower ~'Grid\').trigger(\'reloadGrid\');
+         }") 
+  %}
+
+    {{ form_widget(delete_form) }}
+    {% ui_button style="float:right" type="submit" onclick="return confirm(\'Are you sure?\')" value="Delete"%}
+
+  {% end_ajax_form %}' }}
+  {% endif %}
+
+{{'{% end_ui_dialog %}' }}

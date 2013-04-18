@@ -1,0 +1,48 @@
+{{ '{% extends "YepsuaGeneratorBundle::layout.html.twig" %}' }}
+{{ '{% block crud_content %}' }}
+  
+  {{ '{{ component_render(grid) }}' }}
+  <div id="{{entity|lower}}Workspace"></div>
+  
+{% if 'new' in actions %}
+  {{ '{% remote_command update="#'~ entity|lower ~'Workspace" type="GET" url=path("'~ route_name_prefix ~'_new") ' }}
+                    {{ 'name="rcNew'~ entity|capitalize ~'" %}' }}
+
+{% endif %}
+{% if 'edit' in actions %}
+  {{ '{% remote_command update="#'~ entity|lower ~'Workspace" type="GET" 
+                    beforeSend=js_function("return SmarTwig.grid.hasSelectedRow(\'#'~ entity|lower ~'Grid\',\'Please select a row\')") 
+                    url=arg(path("'~ route_name_prefix ~'_edit", { "id": "\'+ $(\'#'~ entity|lower ~'Grid\').jqGrid(\'getGridParam\',\'selrow\')+\'"}) | raw_url_decode)  
+                    name="rcEdit'~ entity|capitalize ~'" %}' }}
+
+{% endif %}
+{% if 'delete' in actions %}
+  {{ '{% remote_command update="#'~ entity|lower ~'Workspace" type="POST"
+                    beforeSend=js_function("return SmarTwig.grid.hasSelectedRow(\'#'~ entity|lower ~'Grid\',\'Please select a row\') && confirm(\'Are you sure?\')")
+                    complete=js_function("jqXHR","
+                      if (jqXHR.status == 200){
+                        $.pnotify(\'Delete was Successful\');
+                        $(\'#'~ entity|lower ~'Grid\').trigger(\'reloadGrid\')
+                      }")
+                    url=arg(path("'~ route_name_prefix ~'_delete", { "id": "\'+ $(\'#'~ entity|lower ~'Grid\').jqGrid(\'getGridParam\',\'selarrrow\')+\'"}) | raw_url_decode)  
+                    name="rcDelete'~ entity|capitalize ~'" %}' }}
+
+{% endif %}
+{% if 'show' in actions %}
+  {{ '{% remote_command update="#'~ entity|lower ~'Workspace" type="GET" 
+                    beforeSend=js_function("return SmarTwig.grid.hasSelectedRow(\'#'~ entity|lower ~'Grid\',\'Please select a row\')")
+                    url=arg(path(\''~ route_name_prefix ~'_show\', { "id": "\'+ SmarTwig.grid.selectedRow(\'#'~ entity|lower ~'Grid\')+\'"}) | raw_url_decode)  
+                    name="rcShow'~ entity|capitalize ~'" %}' }}
+{% endif %}
+  {%- for field, metadata in fields %}
+      {% if metadata.type == 'date' %}
+
+  {{ '{% ui_datepicker builtIn=\'input[id="gs_'~ entity|lower ~'.'~ field ~'"]\' builtBy=\'input[id="gs_'~ entity|lower ~'.'~ field ~'"]\' builtByEvent="ready" changeMonth=true changeYear=true %} ' }} 
+      {% endif %}
+      {% if metadata.type == 'datetime' %}
+
+  {{ '{% ui_datepicker builtIn=\'input[id="gs_'~ entity|lower ~'.'~ field ~'"]\' datetime=true builtBy=\'input[id="gs_'~ entity|lower ~'.'~ field ~'"]\' builtByEvent="ready" changeMonth=true changeYear=true %} ' }} 
+      {% endif %}
+  {%- endfor %}
+  
+{{ '{% endblock crud_content %}' }}

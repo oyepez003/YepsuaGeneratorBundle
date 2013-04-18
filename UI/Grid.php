@@ -159,7 +159,7 @@ class Grid extends \YsGrid{
    * The Symfony2 tranlator
    * @param \Symfony\Component\Translation\Translator $translator 
    */
-  public function setTranslator(\Symfony\Component\Translation\Translator $translator, $translationDomain = null) {
+  public function setTranslator($translator, $translationDomain = null) {
     $this->setTranslationDomain($translationDomain);
     $this->translator = $translator;
   }

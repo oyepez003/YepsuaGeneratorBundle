@@ -1,0 +1,48 @@
+{{ '{% ui_dialog title="'~ entity ~' edit" modal="true" widgetVar="dlgEdit'~ entity ~'"
+              close=js_function(\'$(this).dialog( "destroy" );$(this).remove();\') %}
+  {% ajax_form id="frmEdit'~ entity ~'"
+       update="#'~ entity|lower ~'Workspace"
+       action=path("'~ route_name_prefix ~'_update", { "id": entity.id })
+       method="PUT"
+       beforeSubmit=js_function("_dlgEdit'~ entity ~' = dlgEdit'~ entity ~';")
+       complete=js_function("jqXHR","
+         _dlgEdit'~ entity ~'.wijdialog(\'destroy\');
+         $(_dlgEdit'~ entity ~').remove();
+         if (jqXHR.status == 200){
+           $.pnotify(\'Update was Successful\');
+           
+           $(\'#'~ entity|lower ~'Grid\').trigger(\'reloadGrid\');
+         }")
+  %}
+
+    {% form_theme edit_form \'YepsuaSmarTwigBundle:Form:table_layout.html.twig\' %}
+
+    {{ form_widget(edit_form) }}
+
+    <br/><br/>
+    <hr class="ui-widget-content">
+
+    {% ui_button style="float:right" type="submit" value="Save"%}
+
+  {% end_ajax_form %}
+
+  {% ajax_form id="frmDelete'~ entity ~'"
+       update="#'~ entity|lower ~'Workspace"
+       action=path("'~ route_name_prefix ~'_delete", { "id": entity.id })
+       method="DELETE"
+       complete=js_function("jqXHR","
+         if (jqXHR.status == 200){
+           $.pnotify(\'Delete was Successful\');
+           dlgEdit'~ entity ~'.wijdialog(\'destroy\');
+           $(\'#'~ entity|lower ~'Grid\').trigger(\'reloadGrid\');
+         }")
+  %}
+
+    {{ form_widget(delete_form) }}
+    {% ui_button style="float:right" type="submit" 
+                 onclick="return confirm(\'Are you sure?\')" 
+                 value="Delete" %}
+
+  {% end_ajax_form %}
+
+{% end_ui_dialog %}' }}
