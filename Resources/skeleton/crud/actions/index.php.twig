@@ -29,7 +29,7 @@
       
       {% for field, metadata in fields %}
       
-        $field = new GridField('{{ entity|lower }}.{{field}}', '{{ field|replace({'_': ' '})|capitalize }}');
+        $field = new GridField('{{ entity|lower }}.{{field}}', '{{ field|replace({'_': ' '})|title }}');
       {%- if metadata.id is defined %}
       
         $field->setHidden(true);
@@ -40,7 +40,7 @@
       {% for association in associationMappings %}
         {% set fieldName = association.fieldName %}
 
-        $field = new GridField('{{fieldName}}.id', '{{fieldName|replace({'_': ' '})|capitalize }}');
+        $field = new GridField('{{fieldName}}.id', '{{fieldName|replace({'_': ' '})|title }}');
         $field->setSearchOptions(array(
           'value' => ':' . ObjectUtil::entityToKeyValue(
             $em->getRepository('{{association.targetEntity}}')->findAll(), ";%KEY%:%VALUE%" 
@@ -116,21 +116,38 @@
                 $row = new GridRow();
                 $row->setId($entitie->getId());
     {%- for field, metadata in fields %}
-
+      {% if '_' in field %}
+        {% set fieldName = field|replace({'_': ' '})|title|replace({' ': ''}) %}
+      {% else %}
+        {% set fieldName = '' %}
+        {% for char in field|split('') %}
+          {%- if loop.first -%} 
+            {%- set char = char|upper -%}
+          {%- endif -%}
+          {% set fieldName = fieldName ~ char %}
+        {% endfor %}
+      {% endif %}
       {%- if metadata.type in ['date', 'datetime'] %}
-
-                $row->newCell($entitie->get{{field|replace({'_': ' '})|title|replace({' ': ''})}}()->format('Y-m-d H:i:s'));
-
+      
+                if($entitie->get{{fieldName}}() !== null){
+                    $row->newCell($entitie->get{{fieldName}}()->format('Y-m-d H:i:s'));
+                }else{
+                    $row->newCell($entitie->get{{fieldName}}());
+                }
+      {%- elseif metadata.type == 'boolean' %}
+      
+                $row->newCell($entitie->is{{fieldName}}());
       {%- else %}
 
-                $row->newCell($entitie->get{{field|replace({'_': ' '})|title|replace({' ': ''})}}());
-
-      {%- endif %}
-
+                $row->newCell($entitie->get{{fieldName}}());
+      {%- endif -%}
     {%- endfor %}
     {%- for association in associationMappings %}
-    
-                $row->newCell((string) $entitie->get{{association.fieldName|replace({'_': ' '})|title|replace({' ': ''})}}());
+     {# for key in association|keys %}
+        {{ key }}: {{ association[key] }}
+     {% endfor #}
+     
+                $row->newCell(ObjectUtil::__toString__($entitie->get{{association.fieldName|replace({'_': ' '})|title|replace({' ': ''})}}()));
                 
     {%- endfor %}
     
@@ -140,6 +157,6 @@
             return new Response($response->buildResponseAsJSON());
         }catch(\Exception $e){
             $this->get('logger')->crit($e->getMessage());
-            return new Response(Notification::error($e->getMessage()));
+            return new Response(Notification::error($e->getMessage()), 203);
         }
     }

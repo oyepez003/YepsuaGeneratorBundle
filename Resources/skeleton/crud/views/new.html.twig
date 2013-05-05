@@ -6,9 +6,13 @@
        method="POST"
        beforeSubmit=js_function("_dlgNew'~ entity ~' = dlgNew'~ entity ~';")
        complete=js_function("jqXHR","
-         _dlgNew'~ entity ~'.wijdialog(\'destroy\');
-         $(_dlgNew'~ entity ~').remove();
+         if(jqXHR.status == 202){
+           _dlgNew'~ entity ~'.wijdialog(\'destroy\');
+           $(_dlgNew'~ entity ~').remove();
+         }
          if (jqXHR.status == 200){
+           _dlgNew'~ entity ~'.wijdialog(\'destroy\');
+           $(_dlgNew'~ entity ~').remove();
            $.pnotify(\''~ entity ~' has been created\');
            $(\'#'~ entity|lower ~'Grid\').trigger(\'reloadGrid\');
          }") 

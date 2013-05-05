@@ -6,11 +6,14 @@
        method="PUT"
        beforeSubmit=js_function("_dlgEdit'~ entity ~' = dlgEdit'~ entity ~';")
        complete=js_function("jqXHR","
-         _dlgEdit'~ entity ~'.wijdialog(\'destroy\');
-         $(_dlgEdit'~ entity ~').remove();
+         if(jqXHR.status == 202){
+           _dlgEdit'~ entity ~'.wijdialog(\'destroy\');
+           $(_dlgEdit'~ entity ~').remove();
+         }
          if (jqXHR.status == 200){
+           _dlgEdit'~ entity ~'.wijdialog(\'destroy\');
+           $(_dlgEdit'~ entity ~').remove();
            $.pnotify(\'Update was Successful\');
-           
            $(\'#'~ entity|lower ~'Grid\').trigger(\'reloadGrid\');
          }")
   %}

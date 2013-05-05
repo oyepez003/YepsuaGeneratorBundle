@@ -37,11 +37,11 @@
   {%- for field, metadata in fields %}
       {% if metadata.type == 'date' %}
 
-  {{ '{% ui_datepicker builtIn=\'input[id="gs_'~ entity|lower ~'.'~ field ~'"]\' builtBy=\'input[id="gs_'~ entity|lower ~'.'~ field ~'"]\' builtByEvent="ready" changeMonth=true changeYear=true %} ' }} 
+  {{ '{% ui_datepicker showButtonPanel=true builtIn=\'input[id="gs_'~ entity|lower ~'.'~ field ~'"]\' builtBy=\'input[id="gs_'~ entity|lower ~'.'~ field ~'"]\' builtByEvent="ready" changeMonth=true changeYear=true %} ' }} 
       {% endif %}
       {% if metadata.type == 'datetime' %}
 
-  {{ '{% ui_datepicker builtIn=\'input[id="gs_'~ entity|lower ~'.'~ field ~'"]\' datetime=true builtBy=\'input[id="gs_'~ entity|lower ~'.'~ field ~'"]\' builtByEvent="ready" changeMonth=true changeYear=true %} ' }} 
+  {{ '{% ui_datepicker showButtonPanel=true builtIn=\'input[id="gs_'~ entity|lower ~'.'~ field ~'"]\' datetime=true builtBy=\'input[id="gs_'~ entity|lower ~'.'~ field ~'"]\' builtByEvent="ready" changeMonth=true changeYear=true %} ' }} 
       {% endif %}
   {%- endfor %}
   

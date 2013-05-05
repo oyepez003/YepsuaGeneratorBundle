@@ -6,7 +6,7 @@
       {%- for field, metadata in fields %}
 
       <tr>
-        <th>{{ field|capitalize }}</th>
+        <td><b>{{ field|replace({'_': ' '})|title }}:</b></td>
 
           {%- if metadata.type in ['date', 'datetime'] %}
 
@@ -21,7 +21,16 @@
       </tr>
 
       {%- endfor %}
+      
+      {%- for field, metadata in associationMappings %}
 
+      <tr>
+        <td><b>{{ field|replace({'_': ' '})|title }}:</b></td>
+        <td>{{- '{% include "YepsuaCommonsBundle::toUL.html.twig" with { \'entities\' : entity.'~ field|replace({'_': ''}) ~'} %}' -}}</td>
+      </tr>
+
+      {%- endfor %}
+      
     </tbody>
   </table>
 {% if ('edit' in actions) or ('delete' in actions) %}
