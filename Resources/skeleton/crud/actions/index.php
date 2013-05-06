@@ -85,36 +85,29 @@
     {
         try{
             JQuery::useComponent(JQueryConstant::COMPONENT_JQGRID);
+            
             $em = $this->getDoctrine()->getManager();
             $orderBy = $this->getRequest()->get('sidx');
+            $page = $this->getRequest()->get("page", 1);
+            $rows = $this->getRequest()->get("rows", 1);
+            $sord = $this->getRequest()->get('sord', 'ASC');
+            $filters = $this->getRequest()->get('filters', null);
+            $response = new GridResponse();
             
-            if ($orderBy) {
-                $sord = $this->getRequest()->get('sord', 'ASC');
-                $repository = $em->getRepository('{{ bundle }}:{{ entity }}');
-                $filters = $this->getRequest()->get('filters', null);
+            $repository = $em->getRepository('{{ bundle }}:{{ entity }}');
+            $count = Dao::count($repository);
+            
+            if($count > 0){
                 $query = Dao::buildQuery($repository, '{{ entity|lower }}', $orderBy, $sord, $filters);
                 {% for association in associationMappings -%}
                 $query = $query->leftJoin('{{ entity|lower }}.{{ association.fieldName }}','{{ association.fieldName }}');
                 {% endfor -%}
+                $query->setMaxResults($rows)->setFirstResult(($page - 1) * $rows);
                 $entities = $query->getQuery()->getResult();
-            } else {
-                $entities = $em->getRepository('{{ bundle }}:{{ entity }}')->findAll();
-            }
-
-            $page = $this->getRequest()->get("page", 1);
-            $rows = $this->getRequest()->get("rows", 1);
-            $paginator = new Paginator($page, $rows);
-
-            $totalRows = sizeof($entities) / $rows;
-            $totalRows = is_real($totalRows) ? intval($totalRows) + 1 : intval($totalRows);
-            $response = new GridResponse();
-            $response->setPage($page);
-            $response->setTotal($totalRows);
-            $response->setRecords(sizeof($entities));
-
-            foreach ($paginator->paginate($entities) as $entitie){
-                $row = new GridRow();
-                $row->setId($entitie->getId());
+                
+                foreach ($entities as $entitie){
+                    $row = new GridRow();
+                    $row->setId($entitie->getId());
     {%- for field, metadata in fields %}
       {% if '_' in field %}
         {% set fieldName = field|replace({'_': ' '})|title|replace({' ': ''}) %}
@@ -129,17 +122,17 @@
       {% endif %}
       {%- if metadata.type in ['date', 'datetime'] %}
       
-                if($entitie->get{{fieldName}}() !== null){
-                    $row->newCell($entitie->get{{fieldName}}()->format('Y-m-d H:i:s'));
-                }else{
-                    $row->newCell($entitie->get{{fieldName}}());
-                }
+                    if($entitie->get{{fieldName}}() !== null){
+                        $row->newCell($entitie->get{{fieldName}}()->format('Y-m-d H:i:s'));
+                    }else{
+                        $row->newCell($entitie->get{{fieldName}}());
+                    }
       {%- elseif metadata.type == 'boolean' %}
       
-                $row->newCell($entitie->is{{fieldName}}());
+                    $row->newCell($entitie->is{{fieldName}}());
       {%- else %}
 
-                $row->newCell($entitie->get{{fieldName}}());
+                    $row->newCell($entitie->get{{fieldName}}());
       {%- endif -%}
     {%- endfor %}
     {%- for association in associationMappings %}
@@ -147,14 +140,21 @@
         {{ key }}: {{ association[key] }}
      {% endfor #}
      
-                $row->newCell(ObjectUtil::__toString__($entitie->get{{association.fieldName|replace({'_': ' '})|title|replace({' ': ''})}}()));
+                    $row->newCell(ObjectUtil::__toString__($entitie->get{{association.fieldName|replace({'_': ' '})|title|replace({' ': ''})}}()));
                 
     {%- endfor %}
     
-                $response->addGridRow($row);
+                    $response->addGridRow($row);
+                }
             }
             
-            return new Response($response->buildResponseAsJSON());
+            $totalRows = $count / $rows;
+            $totalRows = is_real($totalRows) ? intval($totalRows) + 1 : intval($totalRows);
+            $response->setPage($page);
+            $response->setTotal($totalRows);
+            $response->setRecords($count);
+
+            return new Response($response->buildResponseAsJSON());    
         }catch(\Exception $e){
             $this->get('logger')->crit($e->getMessage());
             return new Response(Notification::error($e->getMessage()), 203);
