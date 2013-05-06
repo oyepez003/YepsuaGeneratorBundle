@@ -21,7 +21,6 @@ use {{ namespace }}\Form\{{ entity }}Type;
 
 use Yepsua\GeneratorBundle\UI\Grid;
 use Yepsua\CommonsBundle\Persistence\Dao;
-use Yepsua\CommonsBundle\IO\Paginator;
 {% if not associationMappings is empty  %}
 use Yepsua\CommonsBundle\IO\ObjectUtil;
 {% endif %}
