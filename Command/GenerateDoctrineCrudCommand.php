@@ -51,9 +51,9 @@ EOT
         ;
     }
 
-    protected function getGenerator()
+    protected function getGenerator($bundle = null)
     {
-        parent::getGenerator();
+        parent::getGenerator($bundle);
         if (null === $this->generator) {
             $this->generator = new YepsuaDoctrineCrudGenerator($this->getContainer()->get('filesystem'), __DIR__.'/../Resources/skeleton/crud');
         }
