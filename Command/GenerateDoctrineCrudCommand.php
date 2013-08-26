@@ -15,7 +15,7 @@ namespace Yepsua\GeneratorBundle\Command;
 use Symfony\Component\Console\Command\Command;
 
 use Yepsua\GeneratorBundle\Generator\DoctrineCrudGenerator as YepsuaDoctrineCrudGenerator;
-
+use Symfony\Component\HttpKernel\Bundle\BundleInterface;
 
 /**
  * Generates a CRUD for a Doctrine entity.
@@ -51,7 +51,7 @@ EOT
         ;
     }
 
-    protected function getGenerator($bundle = null)
+    protected function getGenerator(BundleInterface $bundle = null)
     {
         parent::getGenerator($bundle);
         if (null === $this->generator) {
