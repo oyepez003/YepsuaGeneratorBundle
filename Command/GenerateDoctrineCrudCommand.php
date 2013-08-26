@@ -13,9 +13,10 @@ namespace Yepsua\GeneratorBundle\Command;
 
 
 use Symfony\Component\Console\Command\Command;
+use Symfony\Component\HttpKernel\Bundle\BundleInterface;
 
 use Yepsua\GeneratorBundle\Generator\DoctrineCrudGenerator as YepsuaDoctrineCrudGenerator;
-use Symfony\Component\HttpKernel\Bundle\BundleInterface;
+
 
 /**
  * Generates a CRUD for a Doctrine entity.
