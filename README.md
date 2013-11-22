@@ -45,6 +45,7 @@ Add the next dependency in the composer.json file
     },
 ```
 v1.0.0 for sf2.2.x or Old versions
+
 v1.1.0 for sf2.3.x or Higher
 
 Info: Use always the Last Stable Release of Symfony2.
