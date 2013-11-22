@@ -22,23 +22,13 @@ use Doctrine\ORM\Mapping\ClassMetadataInfo;
  */
 class DoctrineCrudGenerator extends \Sensio\Bundle\GeneratorBundle\Generator\DoctrineCrudGenerator
 {
-    /**
-     * Constructor.
-     *
-     * @param Filesystem $filesystem  A Filesystem instance
-     * @param string     $skeletonDir Path to the skeleton directory
-     */
-    public function __construct(Filesystem $filesystem, $skeletonDir)
-    {
-      parent::__construct($filesystem, $skeletonDir);
-    }
     
-    protected function renderFile($skeletonDir, $template, $target, $parameters)
+    protected function renderFile($template, $target, $parameters)
     {
        $parameters = array_merge($parameters, array(
          'fields' => $this->metadata->fieldMappings, 
          'associationMappings' => $this->metadata->associationMappings)
        );
-       parent::renderFile($skeletonDir, $template, $target, $parameters);
+       parent::renderFile($template, $target, $parameters);
     }
 }

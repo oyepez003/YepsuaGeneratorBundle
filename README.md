@@ -40,10 +40,14 @@ Add the next dependency in the composer.json file
 ``` yml
 "require": {
         ...
-        "yepsua/generator-bundle": "dev-master"
+        "yepsua/generator-bundle": "v1.1.0"
         ...
     },
 ```
+v1.0.0 for sf2.2.x or Old versions
+v1.1.0 for sf2.3.x or Higher
+
+Info: Use always the Last Stable Release of Symfony2.
 
 ### For install and up to date the bundle
 

@@ -13,6 +13,7 @@ namespace Yepsua\GeneratorBundle\Command;
 
 
 use Symfony\Component\Console\Command\Command;
+use Symfony\Component\HttpKernel\Bundle\BundleInterface;
 
 use Yepsua\GeneratorBundle\Generator\DoctrineCrudGenerator as YepsuaDoctrineCrudGenerator;
 
@@ -50,13 +51,18 @@ EOT
            ->setAliases(array('generate:doctrine:richcrud'))
         ;
     }
-
-    protected function getGenerator($bundle = null)
+    
+    protected function createGenerator($bundle = null)
     {
-        parent::getGenerator($bundle);
-        if (null === $this->generator) {
-            $this->generator = new YepsuaDoctrineCrudGenerator($this->getContainer()->get('filesystem'), __DIR__.'/../Resources/skeleton/crud');
-        }
-        return $this->generator;
+        return new YepsuaDoctrineCrudGenerator($this->getContainer()->get('filesystem'));
+    }
+    
+    protected function getSkeletonDirs(BundleInterface $bundle = null)
+    {
+        $skeletonDirs = array();
+
+		$skeletonDirs[] = __DIR__.'/../Resources/skeleton';
+		$skeletonDirs[] = __DIR__.'/../Resources';
+        return $skeletonDirs;
     }
 }
