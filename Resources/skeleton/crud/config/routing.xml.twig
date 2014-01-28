@@ -34,7 +34,7 @@
 
     <route id="{{ route_name_prefix }}_update" pattern="/{id}/update">
         <default key="_controller">{{ bundle }}:{{ entity }}:update</default>
-        <requirement key="_method">put</requirement>
+        <requirement key="_method">put|post</requirement>
     </route>
 {% endif %}
 
@@ -42,6 +42,12 @@
     <route id="{{ route_name_prefix }}_delete" pattern="/{id}/delete">
         <default key="_controller">{{ bundle }}:{{ entity }}:delete</default>
         <requirement key="_method">delete|post</requirement>
+    </route>
+{% endif %}
+    
+{% if consoleOptions.with_kanban %}
+    <route id="{{ route_name_prefix }}_kanban" pattern="/kanban">
+        <default key="_controller">{{ bundle }}:{{ entity }}:kanban</default>
     </route>
 {% endif %}
 

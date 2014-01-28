@@ -17,6 +17,7 @@ use \YsGridConstants as GridConstants;
 use \YsGridCustomButton as GridCustomButton;
 use \YsGridFilterToolbar as GridFilterToolbar;
 use \YsGridField as GridField;
+use \YsJQueryBuilder as JQueryBuilder;
 /**
  * Generates a Grid to show the data.
  * @author Omar Yepez <omar.yepez@yepsua.com>
@@ -44,19 +45,26 @@ class Grid extends \YsGrid{
     $this->setEntityName(ucfirst($entityName));
     $this->setTranslator(new \Symfony\Component\Translation\Translator('en'), self::$TRANSLATION_DOMAIN);
     parent::__construct($gridId, $caption, $gridHtmlProperties);
+    
   }
   
-  public function get(){
+  public function hideFilterToolbar(){
+      $this->addPostSintax(sprintf("%s('.ui-search-toolbar').hide()",  JQueryBuilder::$jqueryVar));
+  }
+  
+  /**
+   * @deprecated 1.0.0
+   */
+  public function get($withCRUDButton = false){
     $this->configureNavigator();
+    if($withCRUDButton){
+        $this->addCRUDButtons();
+    }
     $this->configure();
   }
   
-  protected function configureNavigator(){
-    $navigator = new GridNavigator();
-    
-    // No Buttons
-    $navigator->noDefaultButtons();
-    
+  protected function addCRUDButtons(){
+    $navigator = $this->getNavigator();
     if($this->hasAddButton()){
       // Button -> New entity
       $button = new GridCustomButton();
@@ -102,6 +110,16 @@ class Grid extends \YsGrid{
       new JsFunction(sprintf("%s%s%s()",self::$RC_PREFIX, "Show", $this->getEntityName()))
     );
     $navigator->addCustomButton($button);
+    $this->setNavigator($navigator);
+  }
+  
+  protected function configureNavigator(){
+    $navigator = new GridNavigator();
+    
+    // No Buttons
+    $navigator->noDefaultButtons();
+    
+    
     
     if($this->hasFilterButton()){
       // Filter -> Button

@@ -19,6 +19,7 @@
         {% if not ('new' in actions) and not ('edit' in actions) and not ('delete' in actions) -%}
         $grid->noWriteActions();
         {% endif -%}
+        $grid->hideFilterToolbar();
         $grid->get();
         
       {%- if not associationMappings is empty  %}

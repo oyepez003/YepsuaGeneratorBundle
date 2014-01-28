@@ -1,19 +1,67 @@
-{{ '{% extends "YepsuaGeneratorBundle::layout.html.twig" %}' }}
-{{ '{% block crud_content %}' }}
-  
+{{ '{% extends "' ~  consoleOptions.layout  ~ '" %}' }}
+{% set entityName = entity|capitalize %}
+{% set rcNew = 'rcNew'~ entityName %}
+{% set rcEdit = 'rcEdit'~ entityName %}
+{% set rcDelete = 'rcDelete'~ entityName %}
+{% set rcShow = 'rcShow'~ entityName %}
+{% set popUpButton = 'btnPopUp'~ entityName %}
+{% set popUpName = 'popUp'~ entityName %}
+{% set btnKanban = 'btnKanban'~ entityName %}
+{{ '{% block content %}' }}
+  <div class="crud_header">
+    <span class="crud_header_title">{{ entityName }} Module</span>
+    <br/>
+    <table class="crud_header_buttonset">
+      <tr>
+        <td>
+            
+{%if 'new' not in actions and 'edit' not in actions and 'delete' not in actions -%}
+          <button type="button" onclick="{{ rcShow }}()" class="btn btn-primary btn-sm">Show</button>
+          {% else %}
+          <button type="button" onclick="{{ rcNew }}()" class="btn btn-danger btn-sm">New</button>                               
+          <button id="{{ popUpButton }}"  onclick="{{popUpName}}.wijpopup('show')" type="button" class="btn btn-primary btn-sm">More <span class="caret"></span></button>
+                
+          {{'{% ui_popup  autoHide=true
+                       widgetVar="'~popUpName~'"
+                       position={\'of\':jQuery("#'~popUpButton~'"),
+                                 \'offset\':\'0 0\'}%}
+
+            {% ui_panel class="dropdown-menu-panel" %}
+              <ul onclick="'~popUpName~'.wijpopup(\'hide\')" class="dropdown-menu dropdown-menu-visible" role="menu" aria-labelledby="dropdownMenu1">
+                <li role="presentation"><a role="menuitem" tabindex="-1" onclick="'~ rcEdit ~'()" href="#">Edit</a></li>
+                <li role="presentation"><a role="menuitem" tabindex="-1" onclick="'~ rcShow ~'()" href="#">Show</a></li>
+                <li role="presentation" class="divider"></li>
+                <li role="presentation"><a role="menuitem" tabindex="-1" onclick="'~ rcDelete ~'()" href="#">Delete</a></li>
+              </ul>
+            {% end_ui_panel %}
+
+          {% end_ui_popup %}'}}
+{% endif %}
+{%-if consoleOptions.with_kanban %}
+          
+          <div class="crud_header_secondary_buttonset">
+            <a id="{{ btnKanban }}" href="{{'{{ path("'~ route_name_prefix ~'_kanban") }}' }}" type="button"  class="btn btn-default btn-sm"><span class="glyphicon glyphicon-th-large"></span></a>
+              {{'{% ui_tooltip for="#'~ btnKanban ~'" label="Kanban View" %}' }}
+          </div>
+{% endif %}
+          
+        </td>
+      </tr>
+    </table>
+  </div>
   {{ '{{ component_render(grid) }}' }}
   <div id="{{entity|lower}}Workspace"></div>
   
 {% if 'new' in actions %}
   {{ '{% remote_command update="#'~ entity|lower ~'Workspace" type="GET" url=path("'~ route_name_prefix ~'_new") ' }}
-                    {{ 'name="rcNew'~ entity|capitalize ~'" %}' }}
+                    {{ 'name="'~ rcNew ~'" %}' }}
 
 {% endif %}
 {% if 'edit' in actions %}
   {{ '{% remote_command update="#'~ entity|lower ~'Workspace" type="GET" 
                     beforeSend=js_function("return SmarTwig.grid.hasSelectedRow(\'#'~ entity|lower ~'Grid\',\'Please select a row\')") 
                     url=arg(path("'~ route_name_prefix ~'_edit", { "id": "\'+ $(\'#'~ entity|lower ~'Grid\').jqGrid(\'getGridParam\',\'selrow\')+\'"}) | raw_url_decode)  
-                    name="rcEdit'~ entity|capitalize ~'" %}' }}
+                    name="'~ rcEdit ~'" %}' }}
 
 {% endif %}
 {% if 'delete' in actions %}
@@ -25,14 +73,14 @@
                         $(\'#'~ entity|lower ~'Grid\').trigger(\'reloadGrid\')
                       }")
                     url=arg(path("'~ route_name_prefix ~'_delete", { "id": "\'+ $(\'#'~ entity|lower ~'Grid\').jqGrid(\'getGridParam\',\'selarrrow\')+\'"}) | raw_url_decode)  
-                    name="rcDelete'~ entity|capitalize ~'" %}' }}
+                    name="'~ rcDelete ~'" %}' }}
 
 {% endif %}
 {% if 'show' in actions %}
   {{ '{% remote_command update="#'~ entity|lower ~'Workspace" type="GET" 
                     beforeSend=js_function("return SmarTwig.grid.hasSelectedRow(\'#'~ entity|lower ~'Grid\',\'Please select a row\')")
                     url=arg(path(\''~ route_name_prefix ~'_show\', { "id": "\'+ SmarTwig.grid.selectedRow(\'#'~ entity|lower ~'Grid\')+\'"}) | raw_url_decode)  
-                    name="rcShow'~ entity|capitalize ~'" %}' }}
+                    name="'~ rcShow ~'" %}' }}
 {% endif %}
   {%- for field, metadata in fields %}
       {% if metadata.type == 'date' %}
@@ -45,4 +93,4 @@
       {% endif %}
   {%- endfor %}
   
-{{ '{% endblock crud_content %}' }}
+{{ '{% endblock content %}' }}

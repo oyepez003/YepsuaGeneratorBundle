@@ -1,3 +1,5 @@
+{% set entityName = entity|capitalize %}
+{% set btnSunbmit = 'btnSubmit'~ entityName %}
 {{ '{% ui_dialog widgetVar="dlgShow'~ entity ~'" title="'~ entity ~' show" modal="true"
              close=js_function(\'$(this).dialog( "destroy" );$(this).remove();\') %}' }}
 
@@ -40,7 +42,7 @@
   {% endif %}
   {% if ('edit' in actions) %}
 {{'
-  {% ui_button style="float:right" onclick="rc'~ entity ~'EditAgain()" value="Edit"%}
+  {% ui_button class="crud-btn-submit" onclick="rc'~ entity ~'EditAgain()" value="Edit"%}
   {% remote_command update="#'~ entity|lower ~'Workspace" 
        beforeSend=js_function("dlgShow'~ entity ~'.wijdialog(\'destroy\');") 
        type="GET" 
@@ -53,6 +55,7 @@
        update="#'~ entity|lower ~'Workspace"
        action=path("'~ route_name_prefix ~'_delete", { "id": entity.id })
        method="DELETE"
+       beforeSubmit=js_function("$(\'.'~ btnSunbmit ~'\').attr(\'disabled\',true);")
        complete=js_function("jqXHR","
          if (jqXHR.status == 200){
            $.pnotify(\'Delete was Successful\');
@@ -62,7 +65,7 @@
   %}
 
     {{ form_widget(delete_form) }}
-    {% ui_button style="float:right" type="submit" onclick="return confirm(\'Are you sure?\')" value="Delete"%}
+    {% ui_button class="crud-btn-submit '~ btnSunbmit ~'" type="submit" onclick="return confirm(\'Are you sure?\')" value="Delete"%}
 
   {% end_ajax_form %}' }}
   {% endif %}

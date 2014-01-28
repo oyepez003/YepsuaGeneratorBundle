@@ -1,16 +1,27 @@
-{{ '{% ui_dialog title="'~ entity ~' edit" modal="true" widgetVar="dlgEdit'~ entity ~'"
-              close=js_function(\'$(this).dialog( "destroy" );$(this).remove();\') %}
+{% set entityName = entity|capitalize %}
+{% set btnSunbmit = 'btnSubmit'~ entityName %}
+{% set hdnKanban = 'hdnKanban'~ entityName %}
+{% set hdnKanbanCode %}
+{% include 'crud/views/others/refresh.js.twig.twig' with {'consoleOptions': consoleOptions, 'hdnKanban' : hdnKanban} %}
+{% endset %}
+{%- if consoleOptions.multipart -%}
+     {% set method = 'POST' %}
+{%- else  -%}
+     {% set method = 'PUT' %}
+{%- endif -%}
+{{'{% ui_dialog title="'~ entity ~' edit" modal="true" widgetVar="dlgEdit'~ entity ~'"
+             close=js_function(\'$(this).dialog( "destroy" );$(this).remove();\') %}
   {% ajax_form id="frmEdit'~ entity ~'"
        update="#'~ entity|lower ~'Workspace"
        action=path("'~ route_name_prefix ~'_update", { "id": entity.id })
-       method="PUT"
-       beforeSubmit=js_function("_dlgEdit'~ entity ~' = dlgEdit'~ entity ~';")
+       method="'~ method ~'"
+       beforeSubmit=js_function("$(\'.'~ btnSunbmit ~'\').attr(\'disabled\',true);_dlgEdit'~ entity ~' = dlgEdit'~ entity ~';")
        complete=js_function("jqXHR","
          if(jqXHR.status == 202){
            _dlgEdit'~ entity ~'.wijdialog(\'destroy\');
            $(_dlgEdit'~ entity ~').remove();
          }
-         if (jqXHR.status == 200){
+         if (jqXHR.status == 200){'~ hdnKanbanCode ~'
            _dlgEdit'~ entity ~'.wijdialog(\'destroy\');
            $(_dlgEdit'~ entity ~').remove();
            $.pnotify(\'Update was Successful\');
@@ -25,7 +36,7 @@
     <br/><br/>
     <hr class="ui-widget-content">
 
-    {% ui_button style="float:right" type="submit" value="Save"%}
+    {% ui_button class="crud-btn-submit '~ btnSunbmit ~'" type="submit" value="Save"%}
 
   {% end_ajax_form %}
 
@@ -33,8 +44,9 @@
        update="#'~ entity|lower ~'Workspace"
        action=path("'~ route_name_prefix ~'_delete", { "id": entity.id })
        method="DELETE"
+       beforeSubmit=js_function("$(\'.'~ btnSunbmit ~'\').attr(\'disabled\',true);")
        complete=js_function("jqXHR","
-         if (jqXHR.status == 200){
+         if (jqXHR.status == 200){'~ hdnKanbanCode ~'
            $.pnotify(\'Delete was Successful\');
            dlgEdit'~ entity ~'.wijdialog(\'destroy\');
            $(\'#'~ entity|lower ~'Grid\').trigger(\'reloadGrid\');
@@ -42,7 +54,7 @@
   %}
 
     {{ form_widget(delete_form) }}
-    {% ui_button style="float:right" type="submit" 
+    {% ui_button class="crud-btn-submit '~ btnSunbmit ~'" type="submit" 
                  onclick="return confirm(\'Are you sure?\')" 
                  value="Delete" %}
 

@@ -3,4 +3,4 @@
 {% endif %}
 {% ajax_status onstart="$.blockUI(" ~ config ~ ");return false;"
                oncomplete="$.unblockUI('');return false;"
-               for="*" %}
+               for="document" %}

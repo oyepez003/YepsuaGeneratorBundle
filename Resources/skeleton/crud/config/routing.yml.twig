@@ -33,7 +33,7 @@
 {{ route_name_prefix }}_update:
     pattern:  /{id}/update
     defaults: { _controller: "{{ bundle }}:{{ entity }}:update" }
-    requirements: { _method: put }
+    requirements: { _method: put|post }
 {% endif %}
 
 {% if 'delete' in actions %}
@@ -41,4 +41,10 @@
     pattern:  /{id}/delete
     defaults: { _controller: "{{ bundle }}:{{ entity }}:delete" }
     requirements: { _method: delete|post }
+{% endif %}
+    
+{% if consoleOptions.with_kanban %}
+{{ route_name_prefix }}_kanban:
+    pattern:  /kanban
+    defaults: { _controller: "{{ bundle }}:{{ entity }}:kanban" }
 {% endif %}

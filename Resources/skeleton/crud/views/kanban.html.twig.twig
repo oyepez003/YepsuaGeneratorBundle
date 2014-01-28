@@ -1,0 +1,86 @@
+{{ '{% extends "' ~  consoleOptions.layout  ~ '" %}' }}
+{% set entityName = entity|capitalize %}
+{% set rcNew = 'rcNew'~ entityName %}
+{% set rcEdit = 'rcEdit'~ entityName %}
+{% set btnKanban = 'btnKanban'~ entityName %}
+{% set hdnKanban = 'hdnKanban'~ entityName %}
+{{ '{% block content %}' }}
+  <div class="crud_header">
+    <span class="crud_header_title">{{ entityName }} Module</span>
+    <br/>
+    <table class="crud_header_buttonset">
+      <tr>
+        <td>
+            {%if 'new' in actions -%}
+            <button type="button" onclick="{{ rcNew }}()" class="btn btn-danger btn-sm">New</button>
+            {%endif -%}
+            <div class="crud_header_secondary_buttonset">
+                <a id="{{ btnKanban }}" href="{{'{{ path("' ~ route_name_prefix ~ '") }}' }}" type="button"  class="btn btn-default btn-sm"><span class="glyphicon glyphicon-th-list"></span></a>
+                {{'{% ui_tooltip for="#' ~ btnKanban ~ '" label="List View" %}'  }}
+            </div>
+        </td>
+      </tr>
+    </table>
+  </div>
+  <div class="container-fluid">
+    <div class="row crud-kanban-rows">
+    {{ '{% for key, entity in entities %}' }}
+        {%if 'new' in actions -%}
+        <div class="col-md-4 crud-kanban-cell" ondblclick="{{ rcEdit ~ '{{ entity.id }}()'}}">
+        {% else %}
+        <div class="col-md-4 crud-kanban-cell">    
+        {%endif %}  
+          {{ '{% ui_panel %}' }}
+                <a class="list-group-item crud-kanban-card">
+                      <table class="record_properties">
+                          <tbody>
+                            {%- for field, metadata in fields %}
+
+                            <tr>
+                              <td><b>{{ field|replace({'_': ' '})|title }}:</b></td>
+
+                                {%- if metadata.type in ['date', 'datetime'] %}
+
+                              <td>{{ '{{ entity.'~ field|replace({'_': ''}) ~'|date(\'Y-m-d H:i:s\') }}' }}</td>
+
+                                {%- else %}
+
+                              <td>{{ '{{ entity.'~ field|replace({'_': ''}) ~' }}' }}</td>
+
+                                {%- endif %}
+
+                            </tr>
+
+                            {%- endfor %}
+
+                            {%- for field, metadata in associationMappings %}
+
+                            <tr>
+                              <td><b>{{ field|replace({'_': ' '})|title }}:</b></td>
+                              <td>{{- '{% include "YepsuaCommonsBundle::toUL.html.twig" with { \'entities\' : entity.'~ field|replace({'_': ''}) ~'} %}' -}}</td>
+                            </tr>
+
+                            {%- endfor %}
+
+                          </tbody>
+                        </table>
+              </a>
+          {{ '{% end_ui_panel %}' }}
+  {% if 'edit' in actions %}
+          {{ '{% remote_command update="#'~ entity|lower ~'Workspace" type="GET" 
+                                url=arg(path("'~ route_name_prefix ~'_edit", { "id": entity.id}) | raw_url_decode)  
+                                name="'~ rcEdit ~'" ~ entity.id %}' }}
+
+  {% endif %}
+        </div>
+   {{ '{% endfor %}' }}
+    </div>
+  </div>       
+  <div id="{{entity|lower}}Workspace"></div>
+{% if 'new' in actions %}
+  {{ '{% remote_command update="#'~ entity|lower ~'Workspace" type="GET" url=path("'~ route_name_prefix ~'_new") ' }}
+                    {{ 'name="'~ rcNew ~'" %}' }}
+
+{% endif %}
+  <input type="hidden" value="1" id="{{hdnKanban}}" />
+{{ '{% endblock content %}' }}

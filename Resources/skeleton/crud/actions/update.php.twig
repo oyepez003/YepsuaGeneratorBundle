@@ -4,7 +4,11 @@
      *
 {% if 'annotation' == format %}
      * @Route("/{id}", name="{{ route_name_prefix }}_update")
+{% if consoleOptions.multipart %}
+     * @Method("POST")
+{% else  %}
      * @Method("PUT")
+{% endif %}
      * @Template("{{ bundle }}:{{ entity }}:edit.html.twig")
 {% endif %}
      */

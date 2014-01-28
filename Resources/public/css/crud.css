@@ -1,0 +1,50 @@
+.crud_header{
+    background-color: gray; 
+    padding: 5px; 
+    margin: 2px 0px 5px;
+    background-color: #EDEDED;
+    background-image: -ms-linear-gradient(top, #FCFCFC 0%, #DEDEDE 100%);
+    background-image: -moz-linear-gradient(top, #FCFCFC 0%, #DEDEDE 100%);
+    background-image: -o-linear-gradient(top, #FCFCFC 0%, #DEDEDE 100%);
+    background-image: -webkit-gradient(linear, left top, left bottom, color-stop(0, #FCFCFC), color-stop(1, #DEDEDE));
+    background-image: -webkit-linear-gradient(top, #FCFCFC 0%, #DEDEDE 100%);
+    background-image: linear-gradient(to bottom, #FCFCFC 0%, #DEDEDE 100%);
+    border-bottom: 1px solid #CACACA;
+    box-shadow: 0 1px 0 rgba(255, 255, 255, 0.4), 0 0 9px rgba(0, 0, 0, 0.1);
+}
+
+.crud_header_title{
+    color:#4C4C4C;
+    font-weight:bold; 
+    font-size: 18px;
+    text-shadow: 0 1px 1px #FFFFFF;
+}
+
+.crud_header_buttonset{
+    color:#4C4C4C;
+    font-weight:bold; 
+    font-size: 18px;
+    text-shadow: 0 1px 1px #FFFFFF;
+    width: 100%;
+}
+
+.crud_header_secondary_buttonset{
+    float:right;
+}
+
+.crud-kanban-card{
+    cursor: pointer;
+}
+
+.crud-kanban-rows{
+    margin-left: 0px;
+    margin-right: 0px;
+}
+
+.crud-btn-submit{
+    float:right;
+}
+
+.crud-kanban-cell{
+    margin-top: 5px
+}

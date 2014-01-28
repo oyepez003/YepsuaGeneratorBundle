@@ -3,7 +3,11 @@
      * Deletes a {{ entity }} entity.
      *
 {% if 'annotation' == format %}
+{% if consoleOptions.multipart %}
+     * @Route("/{id}/delete", name="{{ route_name_prefix }}_delete")
+{% else  %}
      * @Route("/{id}", name="{{ route_name_prefix }}_delete")
+{% endif %}
      * @Method({"DELETE", "POST"})
 {% endif %}
      */

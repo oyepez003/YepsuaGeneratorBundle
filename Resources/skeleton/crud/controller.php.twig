@@ -49,7 +49,11 @@ class {{ entity_class }}Controller extends Controller
     {%- if 'index' in actions %}
         {%- include 'crud/actions/index.php.twig' %}
     {%- endif %}
-
+    
+    {%- if consoleOptions.with_kanban %}
+        {%- include 'crud/actions/kanban.php.twig' %}
+    {%- endif %}
+   
     {%- if 'new' in actions %}
         {%- include 'crud/actions/create.php.twig' %}
         {%- include 'crud/actions/new.php.twig' %}

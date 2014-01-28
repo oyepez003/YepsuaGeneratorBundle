@@ -1,16 +1,23 @@
+{% set entityName = entity|capitalize %}
+{% set btnSunbmit = 'btnSubmit'~ entityName %}
+{% set hdnKanban = 'hdnKanban'~ entityName %}
+{% set hdnKanbanCode %}
+{% include 'crud/views/others/refresh.js.twig.twig' with {'consoleOptions': consoleOptions, 'hdnKanban' : hdnKanban} %}
+{% endset %}
+
 {{ '{% ui_dialog widgetVar="dlgNew'~ entity ~'" title="'~ entity ~' new" modal="true"
              close=js_function(\'$(this).dialog( "destroy" );$(this).remove();\') %}
   {% ajax_form id="frmNew'~ entity ~'"
        update="#'~ entity|lower ~'Workspace"
        action=path("'~ route_name_prefix ~'_create")
        method="POST"
-       beforeSubmit=js_function("_dlgNew'~ entity ~' = dlgNew'~ entity ~';")
+       beforeSubmit=js_function("$(\'.'~ btnSunbmit ~'\').attr(\'disabled\',true);_dlgNew'~ entity ~' = dlgNew'~ entity ~';")
        complete=js_function("jqXHR","
          if(jqXHR.status == 202){
            _dlgNew'~ entity ~'.wijdialog(\'destroy\');
            $(_dlgNew'~ entity ~').remove();
          }
-         if (jqXHR.status == 200){
+         if (jqXHR.status == 200){'~ hdnKanbanCode ~'
            _dlgNew'~ entity ~'.wijdialog(\'destroy\');
            $(_dlgNew'~ entity ~').remove();
            $.pnotify(\''~ entity ~' has been created\');
@@ -25,7 +32,7 @@
     <br/><br/>
     <hr class="ui-widget-content">
 
-    {% ui_button style="float:right" type="submit" value="Create"%}
+    {% ui_button class="crud-btn-submit '~ btnSunbmit ~'" type="submit" value="Create"%}
 
   {% end_ajax_form %}
 

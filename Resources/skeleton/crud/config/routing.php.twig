@@ -41,7 +41,7 @@ $collection->add('{{ route_name_prefix }}_edit', new Route('/{id}/edit', array(
 $collection->add('{{ route_name_prefix }}_update', new Route(
     '/{id}/update',
     array('_controller' => '{{ bundle }}:{{ entity }}:update'),
-    array('_method' => 'put')
+    array('_method' => 'put|post')
 ));
 {% endif %}
 
@@ -51,6 +51,12 @@ $collection->add('{{ route_name_prefix }}_delete', new Route(
     array('_controller' => '{{ bundle }}:{{ entity }}:delete'),
     array('_method' => 'delete|post')
 ));
+{% endif %}
+
+{% if consoleOptions.with_kanban %}
+$collection->add('{{ route_name_prefix }}_kanban', new Route('/kanban', array(
+    '_controller' => '{{ bundle }}:{{ entity }}:kanban',
+)));
 {% endif %}
 
 return $collection;
