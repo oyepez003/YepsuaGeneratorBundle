@@ -10,60 +10,39 @@
      */
     public function indexAction()
     {
-        JQuery::useComponent(JQueryConstant::COMPONENT_JQGRID);
-        JQuery::usePlugin(JQueryConstant::PLUGIN_PNOTYFY);
-        
-        $grid = new Grid('{{ entity|lower }}','{{ entity }} List');
+        $grid = new Grid('{{ entity|lower }}','list.view.grid.title');
         $grid->setUrl($this->generateUrl('{{ route_name_prefix }}_data'));
-        $grid->setTranslator($this->get('translator'));
+        $grid->setTranslator($this->get('translator'), '{{ bundle ~ '_' ~ entity}}');
         {% if not ('new' in actions) and not ('edit' in actions) and not ('delete' in actions) -%}
         $grid->noWriteActions();
         {% endif -%}
-        $grid->hideFilterToolbar();
-        $grid->get();
-        
+        $grid->createView();
       {%- if not associationMappings is empty  %}
-      
-        $em = $this->getDoctrine()->getManager();
+
+        $grid->setEntityManager($this->getDoctrine()->getManager());
+      {%- endif %}
+
         
-      {%- endif %}
-      
-      {% for field, metadata in fields %}
-      
-        $field = new GridField('{{ entity|lower }}.{{field}}', '{{ field|replace({'_': ' '})|title }}');
+        $fields = array(
+      {%- for field, metadata in fields -%}
       {%- if metadata.id is defined %}
-      
-        $field->setHidden(true);
+
+          '{{ entity|lower }}.{{field}}' => array('hidden' => true),
+      {%- else %}
+
+          '{{ entity|lower }}.{{field}}' => '{{ field|title }}',
       {%- endif %}
-      
-        $grid->addGridField($field);
       {% endfor -%}
       {% for association in associationMappings %}
         {% set fieldName = association.fieldName %}
 
-        $field = new GridField('{{fieldName}}.id', '{{fieldName|replace({'_': ' '})|title }}');
-        $field->setSearchOptions(array(
-          'value' => ':' . ObjectUtil::entityToKeyValue(
-            $em->getRepository('{{association.targetEntity}}')->findAll(), ";%KEY%:%VALUE%" 
-          )
-        ));        
-        $field->setSType(GridConstants::EDIT_TYPE_SELECT);
-        $grid->addGridField($field);
-      {% endfor %}
-      
-      {# for key in associationMappings|keys %}
-        {{ key }}:
-        {% for key2 in associationMappings[key]|keys  %}
-          {{ key2 }}: {{ associationMappings[key][key2] }}
-          {% set value2 = associationMappings[key][key2] %}
-          {% if value2 is iterable  %}
-            {% for key3 in value2|keys  %}
-            {{ key3 }}: {{ value2[key3] }}
-            {% endfor %}
-          {% endif %}
-        {% endfor %}
-      {% endfor #}
-
+          '{{fieldName}}.id' => array('title' => '{{ fieldName|title }}', 'association' => '{{association.targetEntity}}'),
+      {%- endfor %}
+  
+        );
+  
+        $grid->setArrayGridField($fields);
+        
 {% if 'annotation' == format %}
         return array(
             'grid' => $grid
@@ -85,8 +64,11 @@
     public function dataAction()
     {
         try{
-            JQuery::useComponent(JQueryConstant::COMPONENT_JQGRID);
+            if(!$this->getRequest()->isXmlHttpRequest()){
+                return $this->redirect($this->generateUrl('{{ route_name_prefix }}'));
+            }
             
+            JQuery::useComponent(JQueryConstant::COMPONENT_JQGRID);
             $em = $this->getDoctrine()->getManager();
             $orderBy = $this->getRequest()->get('sidx');
             $page = $this->getRequest()->get("page", 1);
@@ -110,17 +92,17 @@
                     $row = new GridRow();
                     $row->setId($entitie->getId());
     {%- for field, metadata in fields %}
-      {% if '_' in field %}
-        {% set fieldName = field|replace({'_': ' '})|title|replace({' ': ''}) %}
-      {% else %}
-        {% set fieldName = '' %}
-        {% for char in field|split('') %}
+      {%- if '_' in field -%}
+        {%- set fieldName = field|replace({'_': ' '})|title|replace({' ': ''}) -%}
+      {%- else -%}
+        {%- set fieldName = '' -%}
+        {%- for char in field|split('') -%}
           {%- if loop.first -%} 
             {%- set char = char|upper -%}
           {%- endif -%}
-          {% set fieldName = fieldName ~ char %}
-        {% endfor %}
-      {% endif %}
+          {%- set fieldName = fieldName ~ char -%}
+        {%- endfor -%}
+      {%- endif -%}
       {%- if metadata.type in ['date', 'datetime'] %}
       
                     if($entitie->get{{fieldName}}() !== null){
@@ -151,11 +133,11 @@
             
             $totalRows = $count / $rows;
             $totalRows = is_real($totalRows) ? intval($totalRows) + 1 : intval($totalRows);
-            $response->setPage($page);
             $response->setTotal($totalRows);
+            $response->setPage($page);
             $response->setRecords($count);
 
-            return new Response($response->buildResponseAsJSON());    
+            return new Response($response->buildResponseAsJSON());
         }catch(\Exception $e){
             $this->get('logger')->crit($e->getMessage());
             return new Response(Notification::error($e->getMessage()), 203);

@@ -12,11 +12,11 @@
       <tr>
         <td>
             {%if 'new' in actions -%}
-            <button type="button" onclick="{{ rcNew }}()" class="btn btn-danger btn-sm">New</button>
+            <button type="button" onclick="{{ rcNew }}()" class="btn btn-danger btn-sm">{{"{{ 'action.new'|trans }}"}}</button>     
             {%endif -%}
             <div class="crud_header_secondary_buttonset">
                 <a id="{{ btnKanban }}" href="{{'{{ path("' ~ route_name_prefix ~ '") }}' }}" type="button"  class="btn btn-default btn-sm"><span class="glyphicon glyphicon-th-list"></span></a>
-                {{'{% ui_tooltip for="#' ~ btnKanban ~ '" label="List View" %}'  }}
+                {{'{% ui_tooltip for="#' ~ btnKanban ~ '" label=\'btn.list.view\'|trans %}'  }}
             </div>
         </td>
       </tr>
@@ -26,9 +26,9 @@
     <div class="row crud-kanban-rows">
     {{ '{% for key, entity in entities %}' }}
         {%if 'new' in actions -%}
-        <div class="col-md-4" ondblclick="{{ rcEdit ~ '{{ entity.id }}()'}}" style="margin-top: 5px">
+        <div class="col-md-4 crud-kanban-cell" ondblclick="{{ rcEdit ~ '{{ entity.id }}()'}}">
         {% else %}
-        <div class="col-md-4" style="margin-top: 5px">    
+        <div class="col-md-4 crud-kanban-cell">    
         {%endif %}  
           {{ '{% ui_panel %}' }}
                 <a class="list-group-item crud-kanban-card">

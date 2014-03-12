@@ -4,8 +4,8 @@
 {% set hdnKanbanCode %}
 {% include 'crud/views/others/refresh.js.twig.twig' with {'consoleOptions': consoleOptions, 'hdnKanban' : hdnKanban} %}
 {% endset %}
-
-{{ '{% ui_dialog widgetVar="dlgNew'~ entity ~'" title="'~ entity ~' new" modal="true"
+{{ '{% set entityLabel = "' ~ entity ~ '" %}'}}
+{{ '{% ui_dialog widgetVar="dlgNew'~ entity ~'" title="dlg.create.title"|trans({\'%name%\': entityLabel}) modal="true"
              close=js_function(\'$(this).dialog( "destroy" );$(this).remove();\') %}
   {% ajax_form id="frmNew'~ entity ~'"
        update="#'~ entity|lower ~'Workspace"
@@ -20,7 +20,7 @@
          if (jqXHR.status == 200){'~ hdnKanbanCode ~'
            _dlgNew'~ entity ~'.wijdialog(\'destroy\');
            $(_dlgNew'~ entity ~').remove();
-           $.pnotify(\''~ entity ~' has been created\');
+           $.pnotify(\'" ~ "msg.create.success"|trans({\'%name%\': entityLabel }) ~ "\');
            $(\'#'~ entity|lower ~'Grid\').trigger(\'reloadGrid\');
          }") 
   %}
@@ -32,7 +32,10 @@
     <br/><br/>
     <hr class="ui-widget-content">
 
-    {% ui_button class="crud-btn-submit '~ btnSunbmit ~'" type="submit" value="Create"%}
+    <input checked="checked" id="_loop_create" type="checkbox" name="_loop_create" />
+    <label for="_loop_create">{{"chk.create.and.create.a.new.one"|trans}}</label>
+
+    {% ui_button class="crud-btn-submit '~ btnSunbmit ~'" type="submit" value="action.create"|trans%}
 
   {% end_ajax_form %}
 

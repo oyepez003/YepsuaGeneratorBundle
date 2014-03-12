@@ -1,6 +1,7 @@
 {% set entityName = entity|capitalize %}
 {% set btnSunbmit = 'btnSubmit'~ entityName %}
-{{ '{% ui_dialog widgetVar="dlgShow'~ entity ~'" title="'~ entity ~' show" modal="true"
+{{ '{% set entityLabel = "' ~ entity ~ '" %}'}}
+{{ '{% ui_dialog widgetVar="dlgShow'~ entity ~'" title="dlg.show.title"|trans({\'%name%\': entityLabel}) modal="true"
              close=js_function(\'$(this).dialog( "destroy" );$(this).remove();\') %}' }}
 
   <table class="record_properties">
@@ -8,7 +9,7 @@
       {%- for field, metadata in fields %}
 
       <tr>
-        <td><b>{{ field|replace({'_': ' '})|title }}:</b></td>
+        <td><b>{{'{{"'}}{{ field|replace({'_': ' '})|title }}{{'"|trans}}'}}:</b></td>
 
           {%- if metadata.type in ['date', 'datetime'] %}
 
@@ -42,7 +43,7 @@
   {% endif %}
   {% if ('edit' in actions) %}
 {{'
-  {% ui_button class="crud-btn-submit" onclick="rc'~ entity ~'EditAgain()" value="Edit"%}
+  {% ui_button class="crud-btn-submit" onclick="rc'~ entity ~'EditAgain()" value="action.edit"|trans %}
   {% remote_command update="#'~ entity|lower ~'Workspace" 
        beforeSend=js_function("dlgShow'~ entity ~'.wijdialog(\'destroy\');") 
        type="GET" 
@@ -58,14 +59,16 @@
        beforeSubmit=js_function("$(\'.'~ btnSunbmit ~'\').attr(\'disabled\',true);")
        complete=js_function("jqXHR","
          if (jqXHR.status == 200){
-           $.pnotify(\'Delete was Successful\');
+           $.pnotify(\'" ~ "msg.delete.success"|trans({\'%name%\': entityLabel}) ~ "\');
            dlgShow'~ entity ~'.wijdialog(\'destroy\');
            $(\'#'~ entity|lower ~'Grid\').trigger(\'reloadGrid\');
          }") 
   %}
 
     {{ form_widget(delete_form) }}
-    {% ui_button class="crud-btn-submit '~ btnSunbmit ~'" type="submit" onclick="return confirm(\'Are you sure?\')" value="Delete"%}
+    {% ui_button class="crud-btn-submit '~ btnSunbmit ~'" type="submit" 
+                 onclick="return confirm(\'" ~ "msg.delete.confirmation"|trans({\'%name%\': entityLabel }) ~ "\')" 
+                 value="action.delete"|trans %}
 
   {% end_ajax_form %}' }}
   {% endif %}

@@ -11,6 +11,10 @@
     public function newAction()
     {
         try{
+            if(!$this->getRequest()->isXmlHttpRequest()){
+                return $this->redirect($this->generateUrl('{{ route_name_prefix }}'));
+            }
+        
             $entity = new {{ entity_class }}();
             $form   = $this->createForm(new {{ entity_class }}Type(), $entity);
 

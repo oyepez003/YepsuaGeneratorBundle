@@ -14,8 +14,8 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 {%- endif %}
 
-use {{ namespace }}\Entity\{{ entity }};
 {% if 'new' in actions or 'edit' in actions %}
+use {{ namespace }}\Entity\{{ entity }};
 use {{ namespace }}\Form\{{ entity }}Type;
 {% endif %}
 
@@ -28,11 +28,9 @@ use Yepsua\SmarTwigBundle\UI\Message\Notification;
 
 use \YsJQuery as JQuery;
 use \YsJQueryConstant as JQueryConstant;
-use \YsGridField as GridField;
 use \YsGridResponse as GridResponse;
 use \YsGridRow as GridRow;
 {% if not associationMappings is empty  %}
-use \YsGridConstants as GridConstants;
 {% endif %}
 
 

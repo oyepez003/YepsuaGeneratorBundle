@@ -6,17 +6,18 @@
 {% set hdnKanban = 'hdnKanban'~ entityName %}
 {{ '{% block content %}' }}
   <div class="crud_header">
-    <span class="crud_header_title">{{ entityName }} Module</span>
-    <br/>
+    <div>
+      <span class="crud_header_title">{{'{{"kanban.view.title"|trans([],\'' ~ bundle ~'_'~ entity ~ '\')}}'}}</span>
+    </div>
     <table class="crud_header_buttonset">
       <tr>
         <td>
             {%if 'new' in actions -%}
-            <button type="button" onclick="{{ rcNew }}()" class="btn btn-danger btn-sm">New</button>
+            <button type="button" onclick="{{ rcNew }}()" class="btn btn-danger btn-sm">{{"{{ 'action.new'|trans }}"}}</button>     
             {%endif -%}
             <div class="crud_header_secondary_buttonset">
                 <a id="{{ btnKanban }}" href="{{'{{ path("' ~ route_name_prefix ~ '") }}' }}" type="button"  class="btn btn-default btn-sm"><span class="glyphicon glyphicon-th-list"></span></a>
-                {{'{% ui_tooltip for="#' ~ btnKanban ~ '" label="List View" %}'  }}
+                {{'{% ui_tooltip for="#' ~ btnKanban ~ '" label=\'btn.list.view\'|trans %}'  }}
             </div>
         </td>
       </tr>

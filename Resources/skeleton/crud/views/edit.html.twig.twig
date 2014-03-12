@@ -9,9 +9,11 @@
 {%- else  -%}
      {% set method = 'PUT' %}
 {%- endif -%}
-{{'{% ui_dialog title="'~ entity ~' edit" modal="true" widgetVar="dlgEdit'~ entity ~'"
+{{ '{% set entityLabel = "' ~ entity ~ '" %}'}}
+{{'{% ui_dialog title="dlg.edit.title"|trans({\'%name%\': entityLabel }) modal="true" widgetVar="dlgEdit'~ entity ~'"
              close=js_function(\'$(this).dialog( "destroy" );$(this).remove();\') %}
-  {% ajax_form id="frmEdit'~ entity ~'"
+   <div style="width:100%">
+   {% ajax_form id="frmEdit'~ entity ~'"
        update="#'~ entity|lower ~'Workspace"
        action=path("'~ route_name_prefix ~'_update", { "id": entity.id })
        method="'~ method ~'"
@@ -24,7 +26,7 @@
          if (jqXHR.status == 200){'~ hdnKanbanCode ~'
            _dlgEdit'~ entity ~'.wijdialog(\'destroy\');
            $(_dlgEdit'~ entity ~').remove();
-           $.pnotify(\'Update was Successful\');
+           $.pnotify(\'" ~ "msg.edit.success"|trans({\'%name%\': entityLabel }) ~ "\');
            $(\'#'~ entity|lower ~'Grid\').trigger(\'reloadGrid\');
          }")
   %}
@@ -36,7 +38,7 @@
     <br/><br/>
     <hr class="ui-widget-content">
 
-    {% ui_button class="crud-btn-submit '~ btnSunbmit ~'" type="submit" value="Save"%}
+    {% ui_button class="crud-btn-submit '~ btnSunbmit ~'" type="submit" value="action.save"|trans%}
 
   {% end_ajax_form %}
 
@@ -47,7 +49,7 @@
        beforeSubmit=js_function("$(\'.'~ btnSunbmit ~'\').attr(\'disabled\',true);")
        complete=js_function("jqXHR","
          if (jqXHR.status == 200){'~ hdnKanbanCode ~'
-           $.pnotify(\'Delete was Successful\');
+           $.pnotify(\'" ~ "msg.delete.success"|trans({\'%name%\': entityLabel }) ~ "\');
            dlgEdit'~ entity ~'.wijdialog(\'destroy\');
            $(\'#'~ entity|lower ~'Grid\').trigger(\'reloadGrid\');
          }")
@@ -55,9 +57,9 @@
 
     {{ form_widget(delete_form) }}
     {% ui_button class="crud-btn-submit '~ btnSunbmit ~'" type="submit" 
-                 onclick="return confirm(\'Are you sure?\')" 
-                 value="Delete" %}
+                 onclick="return confirm(\'" ~ "msg.delete.confirmation"|trans({\'%name%\': entityLabel }) ~ "\')" 
+                 value="action.delete"|trans %}
 
   {% end_ajax_form %}
-
+  </div>
 {% end_ui_dialog %}' }}

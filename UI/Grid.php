@@ -18,6 +18,13 @@ use \YsGridCustomButton as GridCustomButton;
 use \YsGridFilterToolbar as GridFilterToolbar;
 use \YsGridField as GridField;
 use \YsJQueryBuilder as JQueryBuilder;
+use \YsJQuery as JQuery;
+use \YsJQueryConstant as JQueryConstant;
+
+use \Yepsua\CommonsBundle\IO\ObjectUtil;
+
+JQuery::useComponent(JQueryConstant::COMPONENT_JQGRID);
+
 /**
  * Generates a Grid to show the data.
  * @author Omar Yepez <omar.yepez@yepsua.com>
@@ -37,15 +44,19 @@ class Grid extends \YsGrid{
   private $hasFilterButton = true;
   private $hasSearchButton = true;
   private $hasRefreshButton = true;
-  private $translationDomain;
+  private $translatorDomain;
+  private $translatorProperties;
+  private $translatorLocale;
+  private $entityManager;
   
   public function __construct($entityName, $caption = null, $gridHtmlProperties = null) {
+    
     $this->setSortname(sprintf('%s.id',$entityName));
     $gridId = $entityName . self::$ID_SUFFIX;
     $this->setEntityName(ucfirst($entityName));
-    $this->setTranslator(new \Symfony\Component\Translation\Translator('en'), self::$TRANSLATION_DOMAIN);
+    $this->setTranslatorProperties(array());
     parent::__construct($gridId, $caption, $gridHtmlProperties);
-    
+    $this->hideFilterToolbar();
   }
   
   public function hideFilterToolbar(){
@@ -53,24 +64,34 @@ class Grid extends \YsGrid{
   }
   
   /**
-   * @deprecated 1.0.0
+   * @deprecated
    */
   public function get($withCRUDButton = false){
-    $this->configureNavigator();
+    $this->createView($withCRUDButton);
+  }
+  
+  public function createView($withCRUDButton = false){
     if($withCRUDButton){
         $this->addCRUDButtons();
     }
+    $this->configureNavigator();
     $this->configure();
   }
   
-  protected function addCRUDButtons(){
-    $navigator = $this->getNavigator();
+  public function _getNavigator(){
+    return ($this->getNavigator() !== null) 
+           ? $this->getNavigator() 
+           : new GridNavigator();
+   }
+  
+  public function addCRUDButtons(){
+    $navigator = $this->_getNavigator();
     if($this->hasAddButton()){
       // Button -> New entity
       $button = new GridCustomButton();
       $button->setCaption('');
       $button->setButtonIcon(UIConstant::ICON_PLUS);
-      $button->setTitle($this->translator->trans(sprintf("Add %s", $this->getEntityName())));
+      $button->setTitle($this->translator->trans('grid.btn.new.title'));
       $button->setOnClickButton(
         new JsFunction(sprintf("%s%s%s()",self::$RC_PREFIX, "New", $this->getEntityName()))
       );
@@ -82,7 +103,7 @@ class Grid extends \YsGrid{
       $button = new GridCustomButton();
       $button->setCaption('');
       $button->setButtonIcon(UIConstant::ICON_PENCIL);
-      $button->setTitle($this->translator->trans(sprintf("Edit %s", $this->getEntityName())));
+      $button->setTitle($this->translator->trans('grid.btn.edit.title'));
       $button->setOnClickButton(
         new JsFunction(sprintf("%s%s%s()",self::$RC_PREFIX, "Edit", $this->getEntityName()))
       );
@@ -94,7 +115,7 @@ class Grid extends \YsGrid{
       $button = new GridCustomButton();
       $button->setCaption('');
       $button->setButtonIcon(UIConstant::ICON_CLOSE);
-      $button->setTitle($this->translator->trans("Delete selected rows"));
+      $button->setTitle($this->translator->trans("grid.btn.delete.title"));
       $button->setOnClickButton(
         new JsFunction(sprintf("%s%s%s()",self::$RC_PREFIX, "Delete", $this->getEntityName()))
       );
@@ -105,7 +126,7 @@ class Grid extends \YsGrid{
     $button = new GridCustomButton();
     $button->setCaption('');
     $button->setButtonIcon(UIConstant::ICON_DOCUMENT);
-    $button->setTitle($this->translator->trans("Show selected row"));
+    $button->setTitle($this->translator->trans("grid.btn.show.title"));
     $button->setOnClickButton(
       new JsFunction(sprintf("%s%s%s()",self::$RC_PREFIX, "Show", $this->getEntityName()))
     );
@@ -114,7 +135,7 @@ class Grid extends \YsGrid{
   }
   
   protected function configureNavigator(){
-    $navigator = new GridNavigator();
+    $navigator = $this->_getNavigator();
     
     // No Buttons
     $navigator->noDefaultButtons();
@@ -124,9 +145,9 @@ class Grid extends \YsGrid{
     if($this->hasFilterButton()){
       // Filter -> Button
       $button = new GridCustomButton();
-      $button->setCaption($this->translator->trans("Filter"));
+      $button->setCaption($this->translator->trans("grid.btn.filter"));
       $button->setButtonIcon(UIConstant::ICON_PIN_S);
-      $button->setTitle($this->translator->trans("Toggle filter"));
+      $button->setTitle($this->translator->trans("grid.btn.filter.title"));
       $button->setOnClickButton(
         new JsFunction(sprintf("$('#%s')[0].toggleToolbar()",$this->getGridId()))
       );
@@ -177,9 +198,15 @@ class Grid extends \YsGrid{
    * The Symfony2 tranlator
    * @param \Symfony\Component\Translation\Translator $translator 
    */
-  public function setTranslator($translator, $translationDomain = null) {
-    $this->setTranslationDomain($translationDomain);
+  public function setTranslator($translator, $translatorDomain = null, $translatorLocale = null) {
     $this->translator = $translator;
+    $this->setTranslatorDomain($translatorDomain);
+    $this->setTranslatorLocale($translatorLocale);
+    $this->setCaption($this->translate($this->getCaption()));
+  }
+  
+  private function translate($value){
+    return $this->getTranslator()->trans($value, $this->getTranslatorProperties() , $this->getTranslatorDomain());
   }
   
   public function getEntityName() {
@@ -253,15 +280,74 @@ class Grid extends \YsGrid{
   }
   
   public function addGridField(GridField $gridFields) {
-    $gridFields->setColName($this->translator->trans($gridFields->getColName(),array(), $this->getTranslationDomain()));
+    $gridFields->setColName($this->translate($gridFields->getColName()));
     parent::addGridField($gridFields);
   }
   
-  public function getTranslationDomain() {
-    return $this->translationDomain;
+  public function setArrayGridField($gridFields) {;
+    if(is_array($gridFields)){
+      foreach ($gridFields as $key => $value) {
+        $field = new GridField($key, null);
+        if(is_array($value)){
+          if( isset($value['title']) ){
+            $field->setColName($value['title']);
+          }
+          foreach ($value as $_key => $_value) {
+            $field[$_key] = $_value;
+          }
+        }else{
+          $field->setColName($value);
+        }
+        if(isset($value['association'])){
+          $searchPattern = isset($value['searchPattern']) ? $value['searchPattern'] : ";%KEY%:%VALUE%";
+          $searchType = isset($value['searchType']) ? $value['searchType'] : GridConstants::EDIT_TYPE_SELECT;
+          $field->setSearchOptions(array(
+            'value' => ':' . ObjectUtil::entityToKeyValue(
+              $this->getEntityManager()->getRepository($value['association'])->findAll(), $searchPattern
+            )
+          ));
+          $field->setSType($searchType);
+          
+        }
+        $this->addGridField($field);
+      }
+    }
+  }
+  
+  public function getTranslatorDomain() {
+    return $this->translatorDomain;
   }
 
-  public function setTranslationDomain($translationDomain) {
-    $this->translationDomain = $translationDomain;
+  public function setTranslatorDomain($translatorDomain) {
+    if($translatorDomain !== null){
+      $this->translatorDomain = $translatorDomain;
+    }
+  }
+
+    
+  public function getTranslatorProperties() {
+    return $this->translatorProperties;
+  }
+
+  public function setTranslatorProperties($translatorProperties) {
+    $this->translatorProperties = $translatorProperties;
+  }
+
+  public function getTranslatorLocale() {
+    return $this->translatorLocale;
+  }
+
+  public function setTranslatorLocale($translatorLocale) {
+    if($translatorLocale !== null){
+      $this->translatorLocale = $translatorLocale;
+    }
+  }
+  
+  public function getEntityManager() {
+    return $this->entityManager;
+  }
+
+  public function setEntityManager($entityManager) {
+    $this->entityManager = $entityManager;
   }
 }

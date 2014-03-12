@@ -19,13 +19,21 @@
                 $em = $this->getDoctrine()->getManager();
                 $em->persist($entity);
                 $em->flush();
-                $deleteForm = $this->createDeleteForm($entity->getId());
+                
                 {% if 'show' in actions -%}
-
-                return $this->render('{{ bundle }}:{{ entity }}:show.html.twig',array(
-                  'entity'      => $entity,
-                  'delete_form' => $deleteForm->createView(),)
-                );
+                if($this->getRequest()->get('_loop_create')){
+                    $form = $this->createForm(new {{ entity_class }}Type(), new {{ entity_class }}());
+                    return $this->render('{{ bundle }}:{{ entity }}:new.html.twig',array(
+                      'entity'      => $entity,
+                      'form' => $form->createView())
+                    ); 
+                }else{
+                    $deleteForm = $this->createDeleteForm($entity->getId());
+                    return $this->render('{{ bundle }}:{{ entity }}:show.html.twig',array(
+                      'entity' => $entity,
+                      'delete_form' => $deleteForm->createView(),)
+                    );
+                }
 
                 {%- else -%}
                     return $this->redirect($this->generateUrl('{{ route_name_prefix }}'));

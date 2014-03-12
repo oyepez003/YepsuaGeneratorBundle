@@ -11,6 +11,10 @@
     public function showAction($id)
     {
         try{
+            if(!$this->getRequest()->isXmlHttpRequest()){
+                return $this->redirect($this->generateUrl('{{ route_name_prefix }}'));
+            }
+        
             $em = $this->getDoctrine()->getManager();
 
             $entity = $em->getRepository('{{ bundle }}:{{ entity }}')->find($id);
