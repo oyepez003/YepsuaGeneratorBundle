@@ -64,17 +64,18 @@
     public function dataAction()
     {
         try{
-            if(!$this->getRequest()->isXmlHttpRequest()){
+            $request = $this->getRequest();
+            if(!$request->isXmlHttpRequest()){
                 return $this->redirect($this->generateUrl('{{ route_name_prefix }}'));
             }
             
             JQuery::useComponent(JQueryConstant::COMPONENT_JQGRID);
             $em = $this->getDoctrine()->getManager();
-            $orderBy = $this->getRequest()->get('sidx');
-            $page = $this->getRequest()->get("page", 1);
-            $rows = $this->getRequest()->get("rows", 1);
-            $sord = $this->getRequest()->get('sord', 'ASC');
-            $filters = $this->getRequest()->get('filters', null);
+            $orderBy = $request->get('sidx');
+            $page = $request->get("page", 1);
+            $rows = $request->get("rows", 1);
+            $sord = $request->get('sord', 'ASC');
+            $filters = $request->get('filters', null);
             $response = new GridResponse();
             
             $repository = $em->getRepository('{{ bundle }}:{{ entity }}');

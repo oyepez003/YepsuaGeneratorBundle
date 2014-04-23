@@ -50,7 +50,7 @@ class Grid extends \YsGrid{
   private $entityManager;
   
   public function __construct($entityName, $caption = null, $gridHtmlProperties = null) {
-    
+    $this->setMultiboxOnly(true);
     $this->setSortname(sprintf('%s.id',$entityName));
     $gridId = $entityName . self::$ID_SUFFIX;
     $this->setEntityName(ucfirst($entityName));
@@ -71,6 +71,7 @@ class Grid extends \YsGrid{
   }
   
   public function createView($withCRUDButton = false){
+    $this->_getNavigator();
     if($withCRUDButton){
         $this->addCRUDButtons();
     }
@@ -82,7 +83,7 @@ class Grid extends \YsGrid{
     return ($this->getNavigator() !== null) 
            ? $this->getNavigator() 
            : new GridNavigator();
-   }
+  }
   
   public function addCRUDButtons(){
     $navigator = $this->_getNavigator();
@@ -350,4 +351,8 @@ class Grid extends \YsGrid{
   public function setEntityManager($entityManager) {
     $this->entityManager = $entityManager;
   }
+  
+  public function renewNavigator(){
+      $this->setNavigator(new \YsGridNavigator());
+  } 
 }

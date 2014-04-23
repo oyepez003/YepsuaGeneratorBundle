@@ -480,6 +480,10 @@
                 <source>add.new.entry</source>
                 <target>add new entry</target>
             </trans-unit>
+            <trans-unit id='msg.unable.to.find.entity'>
+              <source>msg.unable.to.find.entity</source>
+              <target>Unable to continúe because the récord does not exist.</target>
+            </trans-unit>
         </body>
     </file>
 </xliff>

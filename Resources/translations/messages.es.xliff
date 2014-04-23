@@ -482,6 +482,10 @@
                 <source>add.new.entry</source>
                 <target>add new entry</target>
             </trans-unit>
+            <trans-unit id='msg.unable.to.find.entity'>
+              <source>msg.unable.to.find.entity</source>
+              <target>Imposible continuar con la operación ya que el registro no existe.</target>
+            </trans-unit>
         </body>
     </file>
 </xliff>

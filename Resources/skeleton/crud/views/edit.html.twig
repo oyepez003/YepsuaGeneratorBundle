@@ -9,7 +9,9 @@
 {%- else  -%}
      {% set method = 'PUT' %}
 {%- endif -%}
-{{ '{% set entityLabel = "' ~ entity ~ '" %}'}}
+{{ '{% set tdomain = "' ~ bundle ~'_'~ entity ~ '" %}'}}
+{{ '{% set entityLabel = "entity.label"|trans([], tdomain ) %}'}}
+
 {{'{% ui_dialog title="dlg.edit.title"|trans({\'%name%\': entityLabel }) modal="true" widgetVar="dlgEdit'~ entity ~'"
              close=js_function(\'$(this).dialog( "destroy" );$(this).remove();\') %}
   {% ajax_form id="frmEdit'~ entity ~'"

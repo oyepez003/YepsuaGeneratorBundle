@@ -7,10 +7,12 @@
 {% set popUpButton = 'btnPopUp'~ entityName %}
 {% set popUpName = 'popUp'~ entityName %}
 {% set btnKanban = 'btnKanban'~ entityName %}
+{{ '{% set tdomain = "' ~ bundle ~'_'~ entity ~ '" %}'}}
+
 {{ '{% block content %}' }}
   <div class="crud_header">
     <div>
-      <span class="crud_header_title">{{'{{"list.view.title"|trans([],\'' ~ bundle ~'_'~ entity ~ '\')}}'}}</span>
+      <span class="crud_header_title">{{'{{"list.view.title"|trans([], tdomain)}}'}}</span>
     </div>
     <table class="crud_header_buttonset">
       <tr>

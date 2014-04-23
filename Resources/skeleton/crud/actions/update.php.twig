@@ -19,7 +19,7 @@
             $entity = $em->getRepository('{{ bundle }}:{{ entity }}')->find($id);
 
             if (!$entity) {
-                throw $this->createNotFoundException('Unable to find {{ entity }} entity.');
+                throw $this->createNotFoundException('msg.unable.to.find.entity');
             }
 
             $deleteForm = $this->createDeleteForm($id);

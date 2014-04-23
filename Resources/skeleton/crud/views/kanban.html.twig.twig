@@ -4,10 +4,12 @@
 {% set rcEdit = 'rcEdit'~ entityName %}
 {% set btnKanban = 'btnKanban'~ entityName %}
 {% set hdnKanban = 'hdnKanban'~ entityName %}
+{{ '{% set tdomain = "' ~ bundle ~'_'~ entity ~ '" %}'}}
+
 {{ '{% block content %}' }}
   <div class="crud_header">
     <div>
-      <span class="crud_header_title">{{'{{"kanban.view.title"|trans([],\'' ~ bundle ~'_'~ entity ~ '\')}}'}}</span>
+      <span class="crud_header_title">{{'{{"kanban.view.title"|trans([], tdomain)}}'}}</span>
     </div>
     <table class="crud_header_buttonset">
       <tr>
