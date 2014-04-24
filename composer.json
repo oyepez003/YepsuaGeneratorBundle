@@ -2,7 +2,7 @@
     "name": "yepsua/generator-bundle",
     "description": "The RICH CRUD Generator for Symfony2",
     "keywords": ["extensions","generator","admin","jquery","UI","RIA","jQuery4PHP"],
-    "homepage": "http://smartwig.yepsua.com",
+    "homepage": "http://www.yepsua.com",
     "type": "symfony-bundle",
     "license": "MIT",
     "authors": [
