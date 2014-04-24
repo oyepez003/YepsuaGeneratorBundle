@@ -46,7 +46,7 @@ Add the next dependency in the composer.json file
 ```
 v1.0.0 for sf2.2.x or Old versions
 
-v1.1.0 for sf2.3.x or Higher
+v1.3.0 for sf2.3.x or Higher
 
 Info: Use always the Last Stable Release of Symfony2.
 
@@ -68,9 +68,10 @@ public function registerBundles()
 {
     return array(
         ...
-        new Yepsua\SmarTwigBundle\YepsuaSmarTwigBundle(),
-        new Yepsua\CommonsBundle\YepsuaCommonsBundle(),
-        new Yepsua\GeneratorBundle\YepsuaGeneratorBundle(),
+		new Yepsua\CommonsBundle\YepsuaCommonsBundle(),
+		new Yepsua\RADBundle\YepsuaRADBundle(),
+		new Yepsua\SmarTwigBundle\YepsuaSmarTwigBundle(),
+		new Yepsua\GeneratorBundle\YepsuaGeneratorBundle(),
         ...
     );
 }
@@ -119,7 +120,9 @@ Now, for each created module you need create a translation file for the managed 
 
 If you run:
 
+``` bash
 $ php app/console generate:doctrine:richcrud --entity:AcmeDemoBundle:Post
+```
 
 You must create the AcmeDemoBundle_Post.en.yml file in Acme/DemoBundle/Resources/translations 
 to translate the Module for the Post Entity
@@ -158,7 +161,7 @@ to translate the Module for the Post Entity
 </xliff>
 ```
 
-## New options console
+## New command options
 
 The doctrine:generate:richcrud command has 3 new options (layout, multipart and with-kanban) 
 please use the help for more information.
