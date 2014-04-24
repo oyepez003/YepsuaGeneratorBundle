@@ -40,7 +40,7 @@ Add the next dependency in the composer.json file
 ``` yml
 "require": {
         ...
-        "yepsua/generator-bundle": "v1.1.0"
+        "yepsua/generator-bundle": "v1.2.0"
         ...
     },
 ```
