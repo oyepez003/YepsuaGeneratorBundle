@@ -22,8 +22,8 @@
         ]
     },
     "require": {
-        "yepsua/smartwig-bundle": "dev-master",
-		"yepsua/rad-bundle": "dev-master"
+        "yepsua/smartwig-bundle": "1.2.x-dev",
+		"yepsua/rad-bundle": "1.1.x-dev"
     },
     "autoload": {
         "psr-0": { "Yepsua\\GeneratorBundle": "" }
