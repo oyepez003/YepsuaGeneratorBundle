@@ -22,10 +22,9 @@
         ]
     },
     "require": {
-        "php": ">=5.3.2",
-        "symfony/framework-bundle": ">=2.3",
         "yepsua/commons-bundle": "dev-master",
-        "yepsua/smartwig-bundle": "dev-master"
+        "yepsua/smartwig-bundle": "dev-master",
+		"yepsua/rad-bundle": "dev-master"
     },
     "autoload": {
         "psr-0": { "Yepsua\\GeneratorBundle": "" }
