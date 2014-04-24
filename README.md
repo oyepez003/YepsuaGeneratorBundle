@@ -124,7 +124,7 @@ If you run:
 $ php app/console generate:doctrine:richcrud --entity:AcmeDemoBundle:Post
 ```
 
-You must create the AcmeDemoBundle_Post.en.yml file in Acme/DemoBundle/Resources/translations 
+You must create the AcmeDemoBundle_Post.en.xliff file in Acme/DemoBundle/Resources/translations 
 to translate the Module for the Post Entity
 
 ``` xml
@@ -160,6 +160,8 @@ to translate the Module for the Post Entity
     </file>
 </xliff>
 ```
+
+Remember clear the cache.
 
 ## New command options
 
