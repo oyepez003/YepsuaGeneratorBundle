@@ -60,9 +60,9 @@ Using the --multipart option allows to change the enctype form to multipart/form
 
 <info>php app/console doctrine:generate:richcrud --multipart</info>
                    
-Using the --with-kanban option allows to enable the Kanban View.
+Using the --with-kanban option allows to enable the Kanban View ;) .
 
-<info>php app/console doctrine:generate:richcrud --multipart</info>
+<info>php app/console doctrine:generate:richcrud --with-kanban</info>
 EOT
             )
            ->setName('doctrine:generate:richcrud')

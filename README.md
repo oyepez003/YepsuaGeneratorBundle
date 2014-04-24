@@ -2,7 +2,7 @@ README
 ======
 
 YepsuaGeneratorBundle by @oyepez003
----------------------
+-----------------------------------
 
 The RICH CRUD Generator for Symfony2.
 
@@ -90,6 +90,81 @@ The next command and follow the steps:
 
 ``` bash
 $ php app/console generate:doctrine:richcrud
+```
+
+## 4) Translation
+
+Uncomment the translator in the configuration file ( config.yml ):
+
+``` yaml
+# app/config/config.yml
+
+# ...
+framework:
+    # ...
+    translator:      { fallback: %locale% }
+```
+
+Set the locale in the configuration file ( parameters.yml ):
+
+``` yaml
+# app/config/parameters.yml
+
+parameters:
+	# ...
+    locale: en
+```
+
+Now, for each created module you need create a translation file for the managed entity.
+
+If you run:
+
+$ php app/console generate:doctrine:richcrud --entity:AcmeDemoBundle:Post
+
+You must create the AcmeDemoBundle_Post.en.yml file in Acme/DemoBundle/Resources/translations 
+to translate the Module for the Post Entity
+
+``` xml
+<?xml version="1.0"?>
+<xliff version="1.2" xmlns="urn:oasis:names:tc:xliff:document:1.2">
+    <file source-language="en" datatype="plaintext" original="file.ext">
+        <body>
+            <trans-unit id="entity.label">
+                <source>entity.label</source>
+                <target>Post</target>
+            </trans-unit>
+            <trans-unit id="list.view.title">
+                <source>list.view.title</source>
+                <target>Post Module</target>
+            </trans-unit>
+            <trans-unit id="list.view.grid.title">
+                <source>list.view.grid.title</source>
+                <target>Post List</target>
+            </trans-unit>
+            <trans-unit id="kanban.view.title">
+                <source>kanban.view.title</source>
+                <target>Post Kanban</target>
+            </trans-unit>
+            <trans-unit id="PostFooAttribute">
+                <source>PostFooAttribute</source>
+                <target>Post Foo Attribute</target>
+            </trans-unit>
+            <trans-unit id="PostBarAttribute">
+                <source>PostBarAttribute</source>
+                <target>Post Bar Attribute</target>
+            </trans-unit>
+        </body>
+    </file>
+</xliff>
+```
+
+## New options console
+
+The doctrine:generate:richcrud command has 3 new options (layout, multipart and with-kanban) 
+please use the help for more information.
+
+``` bash
+php app/console generate:doctrine:richcrud --help
 ```
 
 Enjoy
