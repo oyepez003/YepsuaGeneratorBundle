@@ -22,7 +22,6 @@
         ]
     },
     "require": {
-        "yepsua/commons-bundle": "dev-master",
         "yepsua/smartwig-bundle": "dev-master",
 		"yepsua/rad-bundle": "dev-master"
     },
