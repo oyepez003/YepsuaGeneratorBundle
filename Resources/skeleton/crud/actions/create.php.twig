@@ -16,7 +16,7 @@
             $form->bind($request);
 
             if ($form->isValid()) {
-                $em = $this->getDoctrine()->getManager();
+                $em = $this->getEntityManager();
                 $em->persist($entity);
                 $em->flush();
                 

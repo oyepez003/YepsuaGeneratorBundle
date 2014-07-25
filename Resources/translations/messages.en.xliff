@@ -6,6 +6,10 @@
                 <source>menu.more</source>
                 <target>More</target>
             </trans-unit>
+            <trans-unit id="menu.more.options">
+                <source>menu.more.options</source>
+                <target>menu.more.options</target>
+            </trans-unit>
             <trans-unit id="action.new">
                 <source>action.new</source>
                 <target>New</target>
@@ -25,6 +29,38 @@
             <trans-unit id="action.create">
                 <source>action.create</source>
                 <target>Create</target>
+            </trans-unit>
+            <trans-unit id="action.save">
+                <source>action.save</source>
+                <target>Save</target>
+            </trans-unit>
+            <trans-unit id="action.activate">
+                <source>action.activate</source>
+                <target>Activate</target>
+            </trans-unit>
+            <trans-unit id="action.deactivate">
+                <source>action.deactivate</source>
+                <target>Deactivate</target>
+            </trans-unit>
+            <trans-unit id="action.order">
+                <source>action.order</source>
+                <target>Order</target>
+            </trans-unit>
+            <trans-unit id="action.group">
+                <source>action.group</source>
+                <target>Group</target>
+            </trans-unit>
+            <trans-unit id="action.ungroup">
+                <source>action.ungroup</source>
+                <target>Ungroup</target>
+            </trans-unit>
+            <trans-unit id="action.add">
+                <source>action.add</source>
+                <target>Add</target>
+            </trans-unit>
+            <trans-unit id="action.remove">
+                <source>action.remove</source>
+                <target>Remove</target>
             </trans-unit>
             <trans-unit id="grid.btn.filter">
                 <source>grid.btn.filter</source>

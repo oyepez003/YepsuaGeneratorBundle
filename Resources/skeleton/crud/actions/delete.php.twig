@@ -22,13 +22,13 @@
             $form->bind($request);
             $id = strpos($id,',') ? explode(',', $id) : array($id);
             if ($form->isValid()) {
-                $em = $this->getDoctrine()->getManager();
-                $entities = $em->getRepository('{{ bundle }}:{{ entity }}')->findById($id);
+                $entities = $this->getEntityRepository()->findById($id);
 
                 foreach ($entities as $entity){
                   if (!$entity) {
                     throw $this->createNotFoundException('msg.unable.to.find.entity');
                   }
+                  $em = $this->getEntityManager();
                   $em->remove($entity);
                   $em->flush();
                 }

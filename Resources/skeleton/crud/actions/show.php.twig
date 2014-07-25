@@ -14,10 +14,8 @@
             if(!$this->getRequest()->isXmlHttpRequest()){
                 return $this->redirect($this->generateUrl('{{ route_name_prefix }}'));
             }
-        
-            $em = $this->getDoctrine()->getManager();
-
-            $entity = $em->getRepository('{{ bundle }}:{{ entity }}')->find($id);
+            
+            $entity = $this->getEntityRepository()->find($id);
 
             if (!$entity) {
                 throw $this->createNotFoundException('msg.unable.to.find.entity');

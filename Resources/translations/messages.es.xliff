@@ -4,7 +4,11 @@
         <body>
             <trans-unit id="menu.more">
                 <source>menu.more</source>
-                <target>Mas</target>
+                <target>Más</target>
+            </trans-unit>
+            <trans-unit id="menu.more.options">
+                <source>menu.more.options</source>
+                <target>Más opciones</target>
             </trans-unit>
             <trans-unit id="action.new">
                 <source>action.new</source>
@@ -29,6 +33,34 @@
             <trans-unit id="action.save">
                 <source>action.save</source>
                 <target>Guardar</target>
+            </trans-unit>
+            <trans-unit id="action.activate">
+                <source>action.activate</source>
+                <target>Activar</target>
+            </trans-unit>
+            <trans-unit id="action.deactivate">
+                <source>action.deactivate</source>
+                <target>Desactivar</target>
+            </trans-unit>
+            <trans-unit id="action.order">
+                <source>action.order</source>
+                <target>Ordenar</target>
+            </trans-unit>
+            <trans-unit id="action.group">
+                <source>action.group</source>
+                <target>Agrupar</target>
+            </trans-unit>
+            <trans-unit id="action.ungroup">
+                <source>action.ungroup</source>
+                <target>Desagrupar</target>
+            </trans-unit>
+            <trans-unit id="action.add">
+                <source>action.add</source>
+                <target>Agregar</target>
+            </trans-unit>
+            <trans-unit id="action.remove">
+                <source>action.remove</source>
+                <target>Eliminar</target>
             </trans-unit>
             <trans-unit id="grid.btn.filter">
                 <source>grid.btn.filter</source>

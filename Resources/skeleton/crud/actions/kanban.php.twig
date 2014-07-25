@@ -17,9 +17,7 @@
 {% endblock method_definition %}
     {
 {% block method_body %}
-        $em = $this->getDoctrine()->getManager();
-
-        $entities = $em->getRepository('{{ bundle }}:{{ entity }}')->findAll();
+        $entities = $this->getEntityRepository()->findAll();
 {% endblock method_body %}
 
 {% block method_return %}

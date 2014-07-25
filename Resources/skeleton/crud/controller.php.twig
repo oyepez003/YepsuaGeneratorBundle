@@ -2,38 +2,36 @@
 
 namespace {{ namespace }}\Controller{{ entity_namespace ? '\\' ~ entity_namespace : '' }};
 
-use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\Response,
 {% if 'new' in actions or 'edit' in actions or 'delete' in actions %}
-use Symfony\Component\HttpFoundation\Request;
+    Symfony\Component\HttpFoundation\Request,
 {%- endif %}
 
-{% if 'annotation' == format -%}
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
+{% if 'annotation' == format %}
+    Sensio\Bundle\FrameworkExtraBundle\Configuration\Method,
+    Sensio\Bundle\FrameworkExtraBundle\Configuration\Route,
+    Sensio\Bundle\FrameworkExtraBundle\Configuration\Template,
 {%- endif %}
 
 {% if 'new' in actions or 'edit' in actions %}
-use {{ namespace }}\Entity\{{ entity }};
-use {{ namespace }}\Form\{{ entity }}Type;
+  
+    {{ namespace }}\Entity\{{ entity }},
+    {{ namespace }}\Form\{{ entity }}Type,
 {% endif %}
 
-use Yepsua\RADBundle\Controller\Controller;
-use Yepsua\GeneratorBundle\UI\Grid;
-use Yepsua\CommonsBundle\Persistence\Dao;
+    Yepsua\RADBundle\Controller\Controller,
+    Yepsua\GeneratorBundle\UI\Grid,
+    Yepsua\CommonsBundle\Persistence\Dao,
 {% if not associationMappings is empty  %}
-use Yepsua\CommonsBundle\IO\ObjectUtil;
+    Yepsua\CommonsBundle\IO\ObjectUtil,
 {% endif %}
-use Yepsua\SmarTwigBundle\UI\Message\Notification;
+    Yepsua\SmarTwigBundle\UI\Message\Notification,
 
-use \YsJQuery as JQuery;
-use \YsJQueryConstant as JQueryConstant;
-use \YsGridResponse as GridResponse;
-use \YsGridRow as GridRow;
-{% if not associationMappings is empty  %}
-{% endif %}
-
-
+    \YsJQuery as JQuery,
+    \YsJQueryConstant as JQueryConstant,
+    \YsGridResponse as GridResponse,
+    \YsGridRow as GridRow;
+    
 /**
  * {{ entity }} controller.
  *
@@ -43,6 +41,7 @@ use \YsGridRow as GridRow;
  */
 class {{ entity_class }}Controller extends Controller
 {
+    const REPOSITORY_NAMESPACE = '{{ bundle }}:{{ entity }}';
 
     {%- if 'index' in actions %}
         {%- include 'crud/actions/index.php.twig' %}
