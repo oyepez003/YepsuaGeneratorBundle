@@ -62,6 +62,14 @@
                 <source>action.remove</source>
                 <target>Remove</target>
             </trans-unit>
+            <trans-unit id="action.open">
+                <source>action.open</source>
+                <target>Open</target>
+            </trans-unit>
+            <trans-unit id="action.close">
+                <source>action.close</source>
+                <target>Close</target>
+            </trans-unit>
             <trans-unit id="grid.btn.filter">
                 <source>grid.btn.filter</source>
                 <target>Filter</target>
