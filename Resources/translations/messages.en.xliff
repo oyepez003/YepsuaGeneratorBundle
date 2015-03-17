@@ -78,6 +78,10 @@
                 <source>grid.btn.filter.title</source>
                 <target>Toggle filter</target>
             </trans-unit>
+            <trans-unit id="grid.cbo.rownum.all">
+                <source>grid.cbo.rownum.all</source>
+                <target>All</target>
+            </trans-unit>
             <trans-unit id='msg.batch.empty'>
                 <source>msg.batch.empty</source>
                 <target>No items were selected.</target>

@@ -39,6 +39,9 @@ class Grid extends \YsGrid{
   public static $RC_PREFIX = "rc";
   public static $CRUD_TRANSLATION_DOMAIN = "richcrud";
   public static $TRANSLATION_DOMAIN = "messages";
+  
+  public static $ROW_LIST_ALL = "-1";
+  
   private $hasAddButton = true;
   private $hasEditButton = true;
   private $hasDeleteButton = true;
@@ -175,8 +178,8 @@ class Grid extends \YsGrid{
     $this->setWidth("100%");
     $this->setHeight('auto');
     $this->setDataType(GridConstants::DATA_TYPE_JSON);
-    $this->setRowNum(5);
-    $this->setRowList(array(3,5,10));
+    $this->setRowList(array(10,50,100, Grid::$ROW_LIST_ALL));
+    $this->setLoadComplete(new \YsJsFunction(sprintf('$("option[value=%1$s]").text("%2$s");', static::$ROW_LIST_ALL, $this->getTranslator()->trans("grid.cbo.rownum.all"))));
     $this->setViewRecords(true);
     
     $filterToolBar = new GridFilterToolbar();
