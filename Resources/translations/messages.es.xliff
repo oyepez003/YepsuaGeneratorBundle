@@ -78,6 +78,10 @@
                 <source>grid.btn.filter.title</source>
                 <target>Mostrar/Ocultar el filtro</target>
             </trans-unit>
+            <trans-unit id="grid.cbo.rownum.all">
+                <source>grid.cbo.rownum.all</source>
+                <target>Todos</target>
+            </trans-unit>
             <trans-unit id='msg.batch.empty'>
                 <source>msg.batch.empty</source>
                 <target>Ningun item fue seleccionado.</target>

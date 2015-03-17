@@ -37,7 +37,7 @@ class GenerateDoctrineCrudCommand extends \Sensio\Bundle\GeneratorBundle\Command
     protected function configure()
     {
       parent::configure();
-      $this->addOption('layout', null , InputOption::VALUE_REQUIRED, 'The layout for the index','YepsuaGeneratorBundle::layout.html.twig');
+      $this->addOption('layout', null , InputOption::VALUE_REQUIRED, 'The layout for the index','YepsuaRADBundle::layout.html.twig');
       $this->addOption('multipart', null , InputOption::VALUE_NONE, 'Set true if the form enctype is multipart/form-data');
       $this->addOption('with-kanban', null , InputOption::VALUE_NONE, 'Enable the Kanban View');
       $this->setDescription('Generates a CRUD based on a Doctrine entity for a Rich Internet Aplication.')
