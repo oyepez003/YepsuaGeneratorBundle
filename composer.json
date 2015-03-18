@@ -22,7 +22,7 @@
         ]
     },
     "require": {
-        "yepsua/smartwig-bundle": "1.2.x-dev",
+        "yepsua/smartwig-bundle": "1.3.x-dev",
         "yepsua/rad-bundle": "2.0.x-dev"
     },
     "autoload": {
